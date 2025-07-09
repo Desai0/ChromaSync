@@ -12,7 +12,7 @@
 ![Снимок экрана 2025-07-09 104432](https://github.com/user-attachments/assets/6edaf521-201f-431d-be27-d30a4c78b134)
 
 <br>
-Вдохновлена Blurity by diram1x https://github.com/user-attachments/assets/456242b7-b341-4198-a3cb-3a9af1ba262e
+Вдохновлена Blurity by diram1x https://github.com/user-attachments/assets/456242b7-b341-4198-a3cb-3a9af1ba262e](https://github.com/Diramix/blurity/releases
 
 ### Ссылки
 
