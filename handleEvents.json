@@ -1,0 +1,133 @@
+{
+    "sections": [
+        {
+            "title": "Текст",
+            "items": [
+                {
+                    "id": "themeTitleText",
+                    "name": "Theme Title Text",
+                    "description": "Надпись сверху.",
+                    "type": "text",
+                    "buttons": [
+                        {
+                            "name": "text",
+                            "text": "ChromaSync",
+                            "defaultParameter": "ChromaSync"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Vibe-Block",
+            "items": [
+                {
+                    "id": "toggleFullscreenVibeBlock",
+                    "name": "Фуллвайб",
+                    "description": "Делает блок моей волны на всю страницу.",
+                    "type": "button",
+                    "bool": true,
+                    "defaultParameter": false
+                }
+            ]
+        },
+        {
+            "title": "Logo",
+            "items": [
+                {
+                    "id": "toggleVariableNextLogoColor",
+                    "name": "Акцентный цвет",
+                    "description": "Делай цвет лого под цвет акцента трека.",
+                    "type": "button",
+                    "bool": true,
+                    "defaultParameter": false
+                }
+            ]
+        },
+        {
+            "title": "Open-Blocker",
+            "items": [
+                {
+                    "id": "OBdonations",
+                    "name": "Донаты",
+                    "type": "button",
+                    "bool": false,
+                    "defaultParameter": true
+                },
+                {
+                    "id": "OBconcerts",
+                    "name": "Концерты",
+                    "type": "button",
+                    "bool": false,
+                    "defaultParameter": true
+                },
+                {
+                    "id": "OBuserprofile",
+                    "name": "Профиль [BUG]",
+                    "type": "button",
+                    "bool": true,
+                    "defaultParameter": false
+                },
+                {
+                    "id": "OBtrailers",
+                    "name": "Трейлеры",
+                    "type": "button",
+                    "bool": true,
+                    "defaultParameter": true
+                },
+                {
+                    "id": "OBbetabutton",
+                    "name": "Кнопка версии",
+                    "type": "button",
+                    "bool": true,
+                    "defaultParameter": true
+                },
+                {
+                    "id": "OBrelevantnow",
+                    "name": "Актуально сейчас",
+                    "type": "button",
+                    "bool": true,
+                    "defaultParameter": true
+                },
+                {
+                    "id": "OBartistrecommends",
+                    "name": "Артист рекомендует",
+                    "type": "button",
+                    "bool": false,
+                    "defaultParameter": true
+                }
+            ]
+        },
+        {
+            "title": "Особое",
+            "items": [
+                {
+                    "id": "setInterval",
+                    "name": "Скорость обновления настроек темы (в миллисекундах)",
+                    "description": "Выставляет скорость обновления настроек темы. (Задержка нажатия на кнопку в PulseSync и срабатывание в Яндекс Музыке)",
+                    "type": "text",
+                    "buttons": [
+                        {
+                            "name": "text",
+                            "text": "1000",
+                            "defaultParameter": "1000"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Developer",
+            "items": [
+                {
+                    "id": "devAutoPlayOnStart",
+                    "name": "Автоплей",
+                    "description": "Запускает трек сразу после запуска Яндекс Музыки и при нажатии ctrl + r.",
+                    "type": "button",
+                    "bool": false,
+                    "defaultParameter": false
+                }
+            ]
+        }
+    ]
+}

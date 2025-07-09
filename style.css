@@ -1,0 +1,492 @@
+/*ФОН*/
+/*--------------------------------------------*/
+.ym-dark-theme,
+.ym-light-theme,
+.ym-font-music {
+    --ym-background-color-primary-enabled-basic: #000;
+    --average-color-background: 0;
+    --ym-background-color-primary-enabled-content: 0;
+}
+/*--------------------------------------------*/
+
+/*БАЗА*/
+/*--------------------------------------------*/
+.DefaultLayout_root__7J0wo,
+.ym-dark-theme,
+.ym-light-theme {
+	background: 0;
+}
+
+.NavbarDesktop_root__scYzp {
+	backdrop-filter: blur(70px) brightness(1.5);
+	background: #0001;
+	border-radius: 20px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #fff1;
+	height: calc(100% - 13px);
+	margin-top: 14px;
+	min-width: 78px;
+	margin-left: 10px;
+}
+
+.PlayerBarDesktopWithBackgroundProgressBar_playerBar__mp0p9 {
+	position: fixed;
+	height: 90px;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	border-radius: 10px 10px 0px 0px;
+	border-width: 2px 0px 0px 0px;
+	z-index: 401;
+}
+
+@media (min-width: 1079px) {
+    .Content_main__8_wIa {
+        margin-bottom: 85px;
+    }
+
+	.NavbarDesktop_root__scYzp {
+		height: calc(100% - 99px);
+	}
+}
+
+.Content_main__8_wIa,
+.PlayerBarDesktopWithBackgroundProgressBar_playerBar__mp0p9,
+.ReleaseNotesModal_root__RSw1p,
+.Donation_root__nwHCN {
+	backdrop-filter: blur(70px) brightness(1.5);
+	background: 0;
+	border-radius: 20px;
+	border-width: 2px;
+	border-color: #fff1;
+}
+
+.NavbarDesktopUserWidget_userProfileContainer__ha3Tm {
+	height: 45px;
+}
+
+.UserProfile_root__vFuOj {
+	margin-bottom: 10px;
+}
+/*--------------------------------------------*/
+
+/*ТАБЫ - TABS*/
+/*--------------------------------------------*/
+[data-test-id="TAB"] {
+	background: #fff2;
+	border-width: 0;
+}
+
+[data-test-id="TAB"][aria-selected="false"] {
+	background: 0;
+	border-width: 0;
+}
+/*--------------------------------------------*/
+
+/*История - History*/
+/*--------------------------------------------*/
+.MusicHistoryPage_header__dzEvD {
+	background: 0;
+}
+/*--------------------------------------------*/
+
+/*Качество звука*/
+/*--------------------------------------------*/
+.EqualizerPresets_container__ABVY8 {
+	background: 0;
+}
+
+@media (min-width: 1079px) {
+	.QualitySettingsModal_root__f3gE2 {
+		margin-bottom: 85px;
+	}
+}
+
+[data-test-id="QUALITY_SETTINGS_CONTEXT_MENU"] {
+	z-index: 402;
+}
+
+.dJZf0Flxzx7PR15g7zqM {
+	z-index: 403 !important;
+}
+/*--------------------------------------------*/
+
+/*Vibe - Вайб*/
+/*--------------------------------------------*/
+[data-test-id="MY_VIBE_PAUSE_BUTTON"] {
+	background: #fff1;
+	color: #fff;
+}
+
+[data-test-id="MY_VIBE_PLAY_BUTTON"] {
+	background: #fff1;
+	color: #fff;
+}
+
+.VibeSettings_root__ufZlV {
+	background: 0;
+	backdrop-filter: blur(50px);
+}
+/*--------------------------------------------*/
+
+/*Контекстное меню*/
+/*--------------------------------------------*/
+.NOqNiasunvfLvvi75zl9 {
+	z-index: 500;
+}
+
+.s7_MO4NdsYs7nPQALD8W {
+	position: fixed;
+	background: 0;
+	backdrop-filter: blur(60px);
+}
+/*--------------------------------------------*/
+
+/*blurity*/
+/*--------------------------------------------*/
+/* body > div > p {
+	visibility: hidden;
+}
+*/
+
+body > div > p {
+
+	position: fixed;
+	color: #fff;
+	left: 50%;
+	transform: translate(-50%, -2px);
+	z-index: 9999;
+	font-weight: 800;
+	padding: 3px;
+	border-radius: 5px;
+	visibility: visible;
+}
+/*--------------------------------------------*/
+
+.CompositeHeader_stickyChild_scrolling__wm9_D {
+	background: #272727;
+}
+
+/*Полноэкранный плеер*/
+/*--------------------------------------------*/
+.FullscreenPlayerDesktopContent_additionalContent_enter__WQmXC {
+	position: fixed;
+	left: -50%;
+	width: 105%;
+	height: 100%;
+}
+
+.FullscreenPlayerDesktop_root___8vo1.FullscreenPlayerDesktop_important__dGfiL {
+	background: 0;
+}
+/*--------------------------------------------*/
+
+.ggP7WX2_erziDHFOo32s {
+	background: #f000;
+}
+
+/*dev панель*/
+/*--------------------------------------------*/
+.DevPanel_panel__LnoO2 {
+	backdrop-filter: blur(1000px) brightness(0.8);
+}
+/*--------------------------------------------*/
+
+/*Слайдеры громкости*/
+/*--------------------------------------------*/
+.ChangeVolume_root__HDxtA {
+	--slider-thumb-box-shadow-color: #0000;
+}
+
+.ChangeTimecode_slider__P4qmT {
+	--slider-thumb-box-shadow-color: #0000;
+}
+/*--------------------------------------------*/
+
+/*Track Lyrics*/
+/*--------------------------------------------*/
+.TrackLyricsModal_content__Cstzi {
+	color: #fff;
+}
+
+.TrackLyricsModal_header__nWar3 {
+	color: #fff;
+}
+/*--------------------------------------------*/
+
+/*Описание*/
+/*--------------------------------------------*/
+[data-test-id="BLOCK_HEADER_DESCRIPTION"] {
+	color: #fff8;
+}
+/*--------------------------------------------*/
+
+/*Only display: none;*/
+/*--------------------------------------------*/
+.NavbarDesktop_pinsList___jXIM:before,
+.NavbarDesktop_pinsList___jXIM:after,
+.VibeAnimation_root_visible__S7kXl,
+.NavbarDesktop_user__dzbuH,
+.FullscreenPlayerDesktopContent_fullscreenContent_enter__xMN2Yб,
+.NavbarDesktop_scrollableContainer__HLc9D:before,
+.NavbarDesktop_scrollableContainer__HLc9D:after,
+.QualitySettingsModal_overlay__8pjOO,
+.FullscreenPlayerDesktopContent_sliderContainer__FtBZ7,
+.FullscreenPlayerDesktopControls_root__tviu4,
+.BarBelow_root__KFexT,
+.FullscreenPlayerDesktopContent_syncLyricsContent__H_enX:before,
+.FullscreenPlayerDesktopContent_syncLyricsContent__H_enX:after,
+.PlayQueue_root__ponhw:before,
+.PlayQueue_root__ponhw:after {
+	display: none;
+}
+/*--------------------------------------------*/
+
+
+.DefaultLayout_layout__Zvq5Z {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100vh !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
+}
+
+.DefaultLayout_content__tc3y7 {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 10px;
+    min-height: 0; /* Технический "хак" для правильной работы flex */
+}
+
+.PlayerBarDesktopWithBackgroundProgressBar_playerBar__mp0p9 {
+	margin-bottom: 10px;
+	height: 80px;
+	margin-left: 15px;
+	width: calc(100% - 28px) !important;
+    overflow: visible !important; /* РАЗРЕШАЕМ ОТОБРАЖАТЬ ВЫХОДЯЩИЕ ЗА ГРАНИЦЫ ЭЛЕМЕНТЫ */
+}
+
+section[data-test-id="PLAYERBAR_DESKTOP"] {
+    margin-left: -1000px !important;
+	margin-top: 1000;
+	flex-shrink: 0 !important;
+	max-height: 75px;
+    width: calc(0% + 0px) !important;
+}
+
+
+.Content_main__8_wIa {
+    flex: 1 !important;
+    min-width: 0; /* "Хак" для правильной работы flex */
+    /* Убираем все старые отступы, так как Flex теперь управляет ими через `gap` */
+    margin: 0 !important; 
+}
+
+.NavbarDesktop_root__scYzp {
+    backdrop-filter: blur(70px) brightness(1.5);
+    background: #0001;
+    border-radius: 20px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--accent-color, #8a63b3) !important;
+    min-width: 78px;
+    margin-left: 15px;
+    
+    /* КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: Жестко фиксируем высоту */
+    height: calc(100vh - 130px) !important; /* 100% высоты ОКНА минус 90px (плеер) и 23px (отступы) */
+    margin-top: 15px !important;
+
+	position: relative;
+    z-index: 155;
+}
+
+/* -------------------------------------------- */
+/* Усиление яркости фона под полноэкранным плеером (v2) */
+/* -------------------------------------------- */
+.ifxS_8bgSnwBoCsyow0E {
+    /* ИСХОДНЫЙ СТИЛЬ: для оверлея полноэкранного плеера и др. */
+    background-color: transparent !important;
+    backdrop-filter: saturate(200%) blur(0.9375rem) brightness(1) !important;
+}
+
+/* НОВЫЙ СТИЛЬ: только для модального окна трека, переопределяет предыдущий */
+.TrackModal_root__QrFg6.ifxS_8bgSnwBoCsyow0E {
+    /* Делаем фон модального окна полупрозрачным с размытием */
+    background-color: rgba(24, 24, 24, 0.8) !important;
+}
+
+
+.SkmRK9N2oP2Ld9uR2I_N {
+    -webkit-backdrop-filter: blur(var(--blur-depth));
+    backdrop-filter: var(--blur-depth);
+}
+
+/* Слайдер времени */
+.PlayerBarDesktopWithBackgroundProgressBar_slider__SezFn {
+    position: relative !important; /* Необходимо для работы z-index */
+    z-index: 9999 !important;
+}
+
+/* Контейнер управления громкостью */
+.ChangeVolume_root__HDxtA {
+    position: relative !important; /* Необходимо для работы z-index */
+    z-index: 9999 !important;
+}
+
+[data-test-id="QUALITY_SETTINGS_CONTEXT_MENU"] {
+	height: 700px;
+	margin-bottom: 0px;
+	background: transparent !important;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* --- НАЧАЛО: Стилизация слайдеров акцентным цветом (ИСПРАВЛЕНО) --- */
+
+/* 
+  Слайдеры в Яндекс.Музыке стилизуются с помощью нескольких слоев:
+  - Прозрачный <input type="range"> для взаимодействия.
+  - Отдельный <div> для отрисовки дорожки прогресса.
+  Мы стилизуем этот <div> и ручку (thumb) самого <input>.
+*/
+
+/* Сами input'ы делаем полностью прозрачными, чтобы они не мешали */
+[data-test-id="TRACK_LYRICS_TEXT"]::after {
+	background: none !important;
+}
+
+[data-test-id="TIMECODE_SLIDER"],
+[data-test-id="CHANGE_VOLUME_SLIDER"] {
+    background: transparent !important;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* 
+  Вот эти классы отвечают за ВИДИМУЮ ЧАСТЬ дорожки (прогресс).
+  Применяем к ним акцентный цвет.
+*/
+
+.ChangeTimecodeBackground_thumb__vx6J0,
+.ChangeTimecodeBackground_progressbar__M93Ie::before,
+.PlayerBarDesktopWithBackgroundProgressBar_progressBar___Q6eK::before {
+	nav-left: 10px;
+    background-color: var(--accent-color, #8a63b3) !important;
+    height: 5px !important;
+    margin-top: -5px;
+	height: calc(50% - 28px) !important;
+}
+
+.ChangeVolume_wrapperSlider__9S1Vi {
+	background: transparent !important;
+    background-color: #8a63b300;
+	height: 100% !important;
+	border-radius: 20px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #fff1;
+}
+
+/* --- КОНЕЦ: Стилизация слайдеров акцентным цветом --- */
+
+.ChangeTimecodeBackground_thumb__vx6J0 {
+	cursor: grab;
+}
+
+.ChangeVolume_slider__fCKGZ, .ChangeVolume_important__ZIYpu::before {
+	background: transparent !important;
+	background-color: var(--accent-color, #8a63b3) !important;
+	color: var(--accent-color, #8a63b3) !important;
+	border-color: var(--accent-color, #8a63b3) !important;
+}
+
+.ChangeVolume_slider__fCKGZ, .ChangeVolume_important__ZIYpu {
+	background: transparent !important;
+}
+
+.NavbarDesktop_subTitle__Fqvr4 {
+	visibility: hidden !important;
+}
+
+.UserWidget-Iframe {
+	background: transparent !important;
+	background-color: var(--accent-color, #8a63b3) !important;
+	border-color: var(--accent-color, #8a63b3) !important;
+	nav-up: 100px;
+	height: 500px;
+	width: 270px;
+	overflow: visible !important;
+}
+
+.Timecode_root__TLT75, .Timecode_root_end__LLQsh, .TimecodeGroup_timecode__IJXpy, .ChangeTimecodeBackground_timecodeGroup__2VQ1N, .TimecodeGroup_timecode_end__kzP5g {
+	background: transparent !important;
+	/* background-color: var(--accent-color, #8a63b3) !important; */
+	/* color: var(--accent-color, #8a63b3) !important; */
+	border-color: transparent !important;
+}
+
+[data-test-id="TIMECODE_SLIDER"]::-moz-range-thumb,
+[data-test-id="CHANGE_VOLUME_SLIDER"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--accent-color, #8a63b3);
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+/* --- КОНЕЦ: Стилизация слайдеров акцентным цветом --- */
+
+/* --- НАЧАЛО: Стилизация "Хамелеон" через CSS-переменные --- */
+
+/* 
+  Задаем плавный переход для всех элементов, которые будут менять цвет.
+  Это более производительно, чем задавать transition через JS.
+*/
+.NavbarDesktop_root__scYzp, 
+.PlayerBar_root__cXUnU, 
+.Content_main__8_wIa,
+button[data-test-id="PAUSE_BUTTON"],
+button[data-test-id="PLAY_BUTTON"] {
+    transition: color 0.7s ease, background-color 0.7s ease, border-color 0.7s ease, box-shadow 0.7s ease;
+}
+
+/* Рамки и тени */
+.NavbarDesktop_root__scYzp, 
+.PlayerBar_root__cXUnU, 
+.Content_main__8_wIa {
+    border-color: var(--accent-color, #fff1);
+    box-shadow: 0 0 20px -5px var(--accent-color, #0000);
+}
+
+/* Кнопка PAUSE */
+button[data-test-id="PAUSE_BUTTON"] {
+    background-color: var(--light-vibrant-color, #fff) !important;
+    color: var(--dark-vibrant-color, #000) !important;
+}
+
+/* Кнопка PLAY */
+button[data-test-id="PLAY_BUTTON"] {
+    color: var(--light-muted-color, #b0b0b0);
+    border-color: var(--light-muted-color, #b0b0b0) !important;
+}
+
+/* --- КОНЕЦ: Стилизация "Хамелеон" через CSS-переменные --- */
+
+/* --- НАЧАЛО: Оптимизация цвета кнопки "Лайк" --- */
+/*
+  Автоматически применяем акцентный цвет к кнопке, когда она активна (нажата).
+  Это правило заменяет собой целый блок "шпиона" из script.js.
+*/
+button[data-test-id="LIKE_BUTTON"][aria-pressed="true"] {
+    color: var(--accent-color, #8a63b3) !important;
+}
+/* --- КОНЕЦ: Оптимизация цвета кнопки "Лайк" --- */
+
+/* --- ИСПРАВЛЕНИЕ: Убираем градиент с текста песни (точная версия) --- */
+.MsLY_qiKofQrwKAr98EC::after {
+    display: none !important;
+}
