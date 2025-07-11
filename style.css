@@ -157,7 +157,7 @@ body > div > p {
 	left: 50%;
 	transform: translate(-50%, -2px);
 	z-index: 9999;
-	font-weight: 800;
+	font-weight: 500;
 	padding: 3px;
 	border-radius: 5px;
 	visibility: visible;
@@ -312,9 +312,30 @@ section[data-test-id="PLAYERBAR_DESKTOP"] {
 }
 
 /* НОВЫЙ СТИЛЬ: только для модального окна трека, переопределяет предыдущий */
+/* 1. Родительский контейнер. Убираем все лишнее. */
 .TrackModal_root__QrFg6.ifxS_8bgSnwBoCsyow0E {
-    /* Делаем фон модального окна полупрозрачным с размытием */
-    background-color: rgba(24, 24, 24, 0.8) !important;
+    background: transparent !important;
+}
+
+/* 2. Псевдо-элемент ::before - это наш слой с размытием (нижний слой "сэндвича"). */
+.TrackModal_root__QrFg6.ifxS_8bgSnwBoCsyow0E::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    
+    /* Стили самого размытия */
+    background-color: rgba(25, 25, 25, 0.95) !important; 
+    backdrop-filter: blur(90px) !important;
+    
+    border-radius: 12px; /* Скругляем углы */
+}
+
+/* 3. Контейнер с контентом. Поднимаем его НАД слоем с размытием (верхний слой "сэндвича"). */
+.TrackModal_modalContent__AzQPF {
+    position: relative; 
 }
 
 
@@ -481,8 +502,13 @@ button[data-test-id="PLAY_BUTTON"] {
   Автоматически применяем акцентный цвет к кнопке, когда она активна (нажата).
   Это правило заменяет собой целый блок "шпиона" из script.js.
 */
-button[data-test-id="LIKE_BUTTON"][aria-pressed="true"] {
+button[data-test-id="LIKE_BUTTON"] {
     color: var(--accent-color, #8a63b3) !important;
+	transition: filter 0.2s ease, color 0.7s ease;
+}
+
+button[data-test-id="LIKE_BUTTON"]:hover {
+    filter: brightness(1.1);
 }
 /* --- КОНЕЦ: Оптимизация цвета кнопки "Лайк" --- */
 
@@ -490,3 +516,16 @@ button[data-test-id="LIKE_BUTTON"][aria-pressed="true"] {
 .MsLY_qiKofQrwKAr98EC::after {
     display: none !important;
 }
+
+.VibeAnimation_enter_done__Oi2Kz
+{
+    opacity: 0;
+}
+
+.PlayerBarDesktopWithBackgroundProgressBar_player__ASKKs
+{
+	box-shadow: 0 0 20px -3px var(--accent-color, #0000);
+	border-color: var(--accent-color, #fff1);
+	transition: border-color 0.7s ease, box-shadow 0.7s ease;
+}
+

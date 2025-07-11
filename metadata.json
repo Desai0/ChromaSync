@@ -1,12 +1,23 @@
 {
-    "name": "ChromaSync",
-    "image": "image.png",
-    "banner": "banner.jpg",
-    "author": ["Desaichk", "diram1x"],
-    "type": "theme",
-    "description": "Адаптивная тема оживляющая интерфейс прозрачностью и цветами обложки каждого трека",
-    "version": "0.69",
-    "css": "style.css",
-    "script": "script.js",
-    "tags": ["Colored", "Themed", "Blur"]
-  }
+  "name": "ChromaSync",
+  "image": "image.png",
+  "banner": "banner.jpg",
+  "author": [
+      "Desaichk",
+      "diram1x"
+  ],
+  "type": "theme",
+  "description": "Адаптивная тема оживляющая интерфейс прозрачностью и цветами обложки каждого трека",
+  "version": "0.97",
+  "css": "style.css",
+  "script": "script.js",
+  "tags": [
+      "Colored",
+      "Themed",
+      "Blur"
+  ],
+  "fromPext": true,
+    "allowedUrls": [
+      "https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"
+  ]
+}

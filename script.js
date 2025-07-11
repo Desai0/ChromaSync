@@ -27,6 +27,10 @@ const applyChameleonStyles = (palette) => {
     rootStyle.setProperty('--dark-vibrant-color', darkVibrantColor);
     rootStyle.setProperty('--light-muted-color', lightMutedColor);
 
+    rootStyle.setProperty('--ym-controls-color-secondary-text-enabled', darkVibrantColor, 'important');
+    rootStyle.setProperty('--ym-controls-color-secondary-on_default-hovered', darkVibrantColor, 'important');
+    rootStyle.setProperty('--ym-controls-color-secondary-on_default-enabled', darkVibrantColor, 'important');
+
     console.log('[Chameleon] CSS-переменные цвета обновлены.');
 };
 
@@ -585,7 +589,7 @@ const forceSyncOnVisibility = () => {
             currentTrackTitle = "";
             handleCoverChange(coverElement);
         }
-    }, 1500); // 1.5-секундная задержка
+    }, 1200); // 1.5-секундная задержка
 };
 
 // "Слушаем" событие, когда пользователь возвращается на вкладку
