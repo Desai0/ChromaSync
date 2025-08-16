@@ -1,7 +1,7 @@
 {
     "sections": [
         {
-            "title": "Текст",
+            "title": "Элементы интерфейса",
             "items": [
                 {
                     "id": "themeTitleText",
@@ -11,10 +11,206 @@
                     "buttons": [
                         {
                             "name": "text",
-                            "text": "ChromaSync",
-                            "defaultParameter": "ChromaSync"
+                            "text": "ChromaSync Lite",
+                            "defaultParameter": "ChromaSync Lite"
                         }
                     ]
+                },
+                {
+                    "id": "togglePlayerBorder",
+                    "name": "Обводка плеера",
+                    "description": "Включает или выключает цветную обводку и тень у плеера.",
+                    "type": "button",
+                    "bool": true,
+                    "defaultParameter": true
+                },
+                {
+                    "id": "toggleVariableNextLogoColor",
+                    "name": "Акцентный цвет логотипа",
+                    "description": "Делай цвет лого под цвет акцента трека.",
+                    "type": "button",
+                    "bool": true,
+                    "defaultParameter": true
+                }
+            ]
+        },
+        {
+            "title": "Окно с информацией о треке",
+            "items": [
+                {
+                    "id": "trackModalOpacity",
+                    "name": "Прозрачность",
+                    "description": "Регулирует прозрачность фона в модальном окне трека. Значение от 0 (полностью прозрачный) до 100 (полностью непрозрачный).",
+                    "type": "slider",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "value": 65,
+                    "defaultParameter": 65
+                }
+            ]
+        },
+        {
+            "title": "Полноэкранный плеер",
+            "items": [
+                {
+                    "id": "globalSaturate",
+                    "name": "Насыщенность (%)",
+                    "description": "Регулирует общую насыщенность. По умолчанию: 200.",
+                    "type": "slider",
+                    "min": 0,
+                    "max": 500,
+                    "step": 1,
+                    "value": 200,
+                    "defaultParameter": 200
+                },
+                {
+                    "id": "globalBlur",
+                    "name": "Размытие (rem)",
+                    "description": "Регулирует общее размытие. По умолчанию: 0.9375.",
+                    "type": "slider",
+                    "min": 0,
+                    "max": 5,
+                    "step": 0.0625,
+                    "value": 0.9375,
+                    "defaultParameter": 0.9375
+                },
+                {
+                    "id": "globalBrightness",
+                    "name": "Яркость",
+                    "description": "Регулирует общую яркость. По умолчанию: 1.",
+                    "type": "slider",
+                    "min": 0,
+                    "max": 3,
+                    "step": 0.1,
+                    "value": 1,
+                    "defaultParameter": 1
+                }
+            ]
+        },
+        {
+            "title": "Основные элементы интерфейса",
+            "items": [
+                {
+                    "id": "mainElementsBlur",
+                    "name": "Размытие осн. блоков (px)",
+                    "description": "Регулирует размытие фона у плеера и контента. По умолчанию: 70.",
+                    "type": "slider",
+                    "min": 0,
+                    "max": 150,
+                    "step": 1,
+                    "value": 20,
+                    "defaultParameter": 70
+                },
+                {
+                    "id": "mainElementsBrightness",
+                    "name": "Яркость осн. блоков",
+                    "description": "Регулирует яркость фона у плеера и контента. По умолчанию: 1.5.",
+                    "type": "slider",
+                    "min": 0,
+                    "max": 3,
+                    "step": 0.1,
+                    "value": 1.5,
+                    "defaultParameter": 1.5
+                },
+                {
+                    "id": "navbarBlur",
+                    "name": "Размытие навигации (px)",
+                    "description": "Регулирует размытие фона у панели навигации. По умолчанию: 70.",
+                    "type": "slider",
+                    "min": 0,
+                    "max": 150,
+                    "step": 1,
+                    "value": 20,
+                    "defaultParameter": 70
+                },
+                {
+                    "id": "navbarBrightness",
+                    "name": "Яркость навигации",
+                    "description": "Регулирует яркость фона у панели навигации. По умолчанию: 1.5.",
+                    "type": "slider",
+                    "min": 0,
+                    "max": 3,
+                    "step": 0.1,
+                    "value": 1.5,
+                    "defaultParameter": 1.5
+                },
+                {
+                    "id": "backgroundBrightness",
+                    "name": "Яркость фона",
+                    "description": "Регулирует яркость обложки на фоне. По умолчанию: 0.5.",
+                    "type": "slider",
+                    "min": 0,
+                    "max": 1,
+                    "step": 0.05,
+                    "value": 0.5,
+                    "defaultParameter": 0.5
+                }
+            ]
+        },
+        {
+            "title": "Настройки цвета",
+            "items": [
+                {
+                    "id": "accentColorSource",
+                    "name": "Источник акцентного цвета",
+                    "description": "Выберите, какой тип цвета из обложки будет основным для темы. \nПожалуйста, перейдите в Wiki проекта на гитхаб, для подробных разъяснений логики работы цветов",
+                    "type": "selector",
+                    "selected": 0,
+                    "options": [
+                        { "name": "Vibrant (Яркий, основной)", "id": "Vibrant" },
+                        { "name": "LightVibrant (Светлый и живой)", "id": "LightVibrant" },
+                        { "name": "DarkVibrant (Темный и глубокий)", "id": "DarkVibrant" },
+                        { "name": "Muted (Спокойный, приглушенный)", "id": "Muted" },
+                        { "name": "LightMuted (Светлый, пастельный)", "id": "LightMuted" },
+                        { "name": "DarkMuted (Темный, приглушенный)", "id": "DarkMuted" }
+                    ],
+                    "defaultParameter": "Vibrant"
+                },
+                {
+                    "id": "useCustomAccentColor",
+                    "name": "Использовать свой акцентный цвет",
+                    "description": "Отключает автоматическое определение цвета по обложке и позволяет задать свой.",
+                    "type": "button",
+                    "bool": false,
+                    "defaultParameter": false
+                },
+                {
+                    "id": "customAccentColor",
+                    "name": "Акцентный цвет",
+                    "description": "Выберите свой цвет. Будет работать, только если включена опция выше.",
+                    "type": "color",
+                    "value": "#8a63b3",
+                    "defaultParameter": "#8a63b3",
+                    "input": "#00ffcc"
+                },
+                {
+                    "id": "togglePlayButtonAccent",
+                    "name": "Акцентная кнопка Play",
+                    "description": "Включает или выключает использование акцентного цвета для кнопки Play.",
+                    "type": "button",
+                    "bool": true,
+                    "defaultParameter": true
+                }
+            ]
+        },
+        {
+            "title": "Developer",
+            "items": [
+                {
+                    "id": "hideBetaButton",
+                    "name": "Скрыть версию приложения",
+                    "type": "button",
+                    "bool": true,
+                    "defaultParameter": false
+                },
+                {
+                    "id": "devAutoPlayOnStart",
+                    "name": "Автоплей",
+                    "description": "Запускает трек сразу после запуска Яндекс Музыки и при нажатии ctrl + r.",
+                    "type": "button",
+                    "bool": false,
+                    "defaultParameter": false
                 }
             ]
         },
@@ -27,73 +223,6 @@
                     "description": "Делает блок моей волны на всю страницу.",
                     "type": "button",
                     "bool": true,
-                    "defaultParameter": false
-                }
-            ]
-        },
-        {
-            "title": "Logo",
-            "items": [
-                {
-                    "id": "toggleVariableNextLogoColor",
-                    "name": "Акцентный цвет",
-                    "description": "Делай цвет лого под цвет акцента трека.",
-                    "type": "button",
-                    "bool": true,
-                    "defaultParameter": false
-                }
-            ]
-        },
-        {
-            "title": "Open-Blocker",
-            "items": [
-                {
-                    "id": "OBdonations",
-                    "name": "Донаты",
-                    "type": "button",
-                    "bool": false,
-                    "defaultParameter": true
-                },
-                {
-                    "id": "OBconcerts",
-                    "name": "Концерты",
-                    "type": "button",
-                    "bool": false,
-                    "defaultParameter": true
-                },
-                {
-                    "id": "OBuserprofile",
-                    "name": "Профиль [BUG]",
-                    "type": "button",
-                    "bool": true,
-                    "defaultParameter": false
-                },
-                {
-                    "id": "OBtrailers",
-                    "name": "Трейлеры",
-                    "type": "button",
-                    "bool": true,
-                    "defaultParameter": true
-                },
-                {
-                    "id": "OBbetabutton",
-                    "name": "Кнопка версии",
-                    "type": "button",
-                    "bool": true,
-                    "defaultParameter": true
-                },
-                {
-                    "id": "OBrelevantnow",
-                    "name": "Актуально сейчас",
-                    "type": "button",
-                    "bool": true,
-                    "defaultParameter": true
-                },
-                {
-                    "id": "OBartistrecommends",
-                    "name": "Артист рекомендует",
-                    "type": "button",
-                    "bool": false,
                     "defaultParameter": true
                 }
             ]
@@ -107,25 +236,8 @@
                     "description": "Выставляет скорость обновления настроек темы. (Задержка нажатия на кнопку в PulseSync и срабатывание в Яндекс Музыке)",
                     "type": "text",
                     "buttons": [
-                        {
-                            "name": "text",
-                            "text": "1000",
-                            "defaultParameter": "1000"
-                        }
+                        { "name": "text", "text": "1000", "defaultParameter": "1000" }
                     ]
-                }
-            ]
-        },
-        {
-            "title": "Developer",
-            "items": [
-                {
-                    "id": "devAutoPlayOnStart",
-                    "name": "Автоплей",
-                    "description": "Запускает трек сразу после запуска Яндекс Музыки и при нажатии ctrl + r.",
-                    "type": "button",
-                    "bool": false,
-                    "defaultParameter": false
                 }
             ]
         }

@@ -1,34 +1,27 @@
-/*ФОН*/
-/*--------------------------------------------*/
+/*
+  ChromaSync Theme Stylesheet
+  ---------------------------
+*/
+
+
+/* --- I. Базовые переопределения и фон --- */
+
 .ym-dark-theme,
 .ym-light-theme,
 .ym-font-music {
-    --ym-background-color-primary-enabled-basic: #000;
-    --average-color-background: 0;
-    --ym-background-color-primary-enabled-content: 0;
+	--ym-background-color-primary-enabled-basic: #000;
+	--average-color-background: 0;
+	--ym-background-color-primary-enabled-content: 0;
 }
-/*--------------------------------------------*/
 
-/*БАЗА*/
-/*--------------------------------------------*/
 .DefaultLayout_root__7J0wo,
 .ym-dark-theme,
 .ym-light-theme {
 	background: 0;
 }
 
-.NavbarDesktop_root__scYzp {
-	backdrop-filter: blur(70px) brightness(1.5);
-	background: #0001;
-	border-radius: 20px;
-	border-width: 2px;
-	border-style: solid;
-	border-color: #fff1;
-	height: calc(100% - 13px);
-	margin-top: 14px;
-	min-width: 78px;
-	margin-left: 10px;
-}
+
+/* --- II. Основной макет (Layout) --- */
 
 .PlayerBarDesktopWithBackgroundProgressBar_playerBar__mp0p9 {
 	position: fixed;
@@ -69,10 +62,11 @@
 .UserProfile_root__vFuOj {
 	margin-bottom: 10px;
 }
-/*--------------------------------------------*/
 
-/*ТАБЫ - TABS*/
-/*--------------------------------------------*/
+
+/* --- III. Элементы интерфейса --- */
+
+/* Табы (вкладки) */
 [data-test-id="TAB"] {
 	background: #fff2;
 	border-width: 0;
@@ -82,17 +76,13 @@
 	background: 0;
 	border-width: 0;
 }
-/*--------------------------------------------*/
 
-/*История - History*/
-/*--------------------------------------------*/
+/* Страница истории */
 .MusicHistoryPage_header__dzEvD {
 	background: 0;
 }
-/*--------------------------------------------*/
 
-/*Качество звука*/
-/*--------------------------------------------*/
+/* Настройки качества звука */
 .EqualizerPresets_container__ABVY8 {
 	background: 0;
 }
@@ -110,10 +100,8 @@
 .dJZf0Flxzx7PR15g7zqM {
 	z-index: 403 !important;
 }
-/*--------------------------------------------*/
 
-/*Vibe - Вайб*/
-/*--------------------------------------------*/
+/* Блок "Моя волна" (Vibe) */
 [data-test-id="MY_VIBE_PAUSE_BUTTON"] {
 	background: #fff1;
 	color: #fff;
@@ -128,10 +116,8 @@
 	background: 0;
 	backdrop-filter: blur(50px);
 }
-/*--------------------------------------------*/
 
-/*Контекстное меню*/
-/*--------------------------------------------*/
+/* Контекстное меню */
 .NOqNiasunvfLvvi75zl9 {
 	z-index: 500;
 }
@@ -141,17 +127,11 @@
 	background: 0;
 	backdrop-filter: blur(60px);
 }
-/*--------------------------------------------*/
 
-/*blurity*/
-/*--------------------------------------------*/
-/* body > div > p {
-	visibility: hidden;
-}
-*/
 
-body > div > p {
+/* --- IV. Панель PulseSync --- */
 
+.PSB-text {
 	position: fixed;
 	color: #fff;
 	left: 50%;
@@ -162,14 +142,14 @@ body > div > p {
 	border-radius: 5px;
 	visibility: visible;
 }
-/*--------------------------------------------*/
+
+
+/* --- V. Шапка, полноэкранный плеер и другие блоки --- */
 
 .CompositeHeader_stickyChild_scrolling__wm9_D {
 	background: #272727;
 }
 
-/*Полноэкранный плеер*/
-/*--------------------------------------------*/
 .FullscreenPlayerDesktopContent_additionalContent_enter__WQmXC {
 	position: fixed;
 	left: -50%;
@@ -180,21 +160,17 @@ body > div > p {
 .FullscreenPlayerDesktop_root___8vo1.FullscreenPlayerDesktop_important__dGfiL {
 	background: 0;
 }
-/*--------------------------------------------*/
 
 .ggP7WX2_erziDHFOo32s {
 	background: #f000;
 }
 
-/*dev панель*/
-/*--------------------------------------------*/
+/* Dev-панель */
 .DevPanel_panel__LnoO2 {
 	backdrop-filter: blur(1000px) brightness(0.8);
 }
-/*--------------------------------------------*/
 
-/*Слайдеры громкости*/
-/*--------------------------------------------*/
+/* Слайдеры */
 .ChangeVolume_root__HDxtA {
 	--slider-thumb-box-shadow-color: #0000;
 }
@@ -202,10 +178,8 @@ body > div > p {
 .ChangeTimecode_slider__P4qmT {
 	--slider-thumb-box-shadow-color: #0000;
 }
-/*--------------------------------------------*/
 
-/*Track Lyrics*/
-/*--------------------------------------------*/
+/* Текст песни (Lyrics) */
 .TrackLyricsModal_content__Cstzi {
 	color: #fff;
 }
@@ -213,17 +187,15 @@ body > div > p {
 .TrackLyricsModal_header__nWar3 {
 	color: #fff;
 }
-/*--------------------------------------------*/
 
-/*Описание*/
-/*--------------------------------------------*/
+/* Описание блока */
 [data-test-id="BLOCK_HEADER_DESCRIPTION"] {
 	color: #fff8;
 }
-/*--------------------------------------------*/
 
-/*Only display: none;*/
-/*--------------------------------------------*/
+
+/* --- VI. Скрытые элементы (display: none) --- */
+
 .NavbarDesktop_pinsList___jXIM:before,
 .NavbarDesktop_pinsList___jXIM:after,
 .VibeAnimation_root_visible__S7kXl,
@@ -241,15 +213,16 @@ body > div > p {
 .PlayQueue_root__ponhw:after {
 	display: none;
 }
-/*--------------------------------------------*/
 
+
+/* --- VII. Более поздние или специфичные стили макета --- */
 
 .DefaultLayout_layout__Zvq5Z {
-    display: flex !important;
-    flex-direction: column !important;
-    height: 100vh !important;
-    padding: 10px !important;
-    box-sizing: border-box !important;
+	display: flex !important;
+	flex-direction: column !important;
+	height: 100vh !important;
+	padding: 10px !important;
+	box-sizing: border-box !important;
 }
 
 .DefaultLayout_content__tc3y7 {
@@ -269,13 +242,12 @@ body > div > p {
 }
 
 section[data-test-id="PLAYERBAR_DESKTOP"] {
-    margin-left: -1000px !important;
+	margin-left: -1000px !important;
 	margin-top: 1000;
 	flex-shrink: 0 !important;
 	max-height: 75px;
-    width: calc(0% + 0px) !important;
+	width: calc(0% + 0px) !important;
 }
-
 
 .Content_main__8_wIa {
     flex: 1 !important;
@@ -299,22 +271,20 @@ section[data-test-id="PLAYERBAR_DESKTOP"] {
     margin-top: 15px !important;
 
 	position: relative;
-    z-index: 155;
+	z-index: 155;
 }
 
-/* -------------------------------------------- */
-/* Усиление яркости фона под полноэкранным плеером (v2) */
-/* -------------------------------------------- */
+
+/* --- VIII. Стили для модальных окон и оверлеев --- */
+
 .ifxS_8bgSnwBoCsyow0E {
     /* ИСХОДНЫЙ СТИЛЬ: для оверлея полноэкранного плеера и др. */
     background-color: transparent !important;
     backdrop-filter: saturate(200%) blur(0.9375rem) brightness(1) !important;
 }
 
-/* НОВЫЙ СТИЛЬ: только для модального окна трека, переопределяет предыдущий */
-/* 1. Родительский контейнер. Убираем все лишнее. */
 .TrackModal_root__QrFg6.ifxS_8bgSnwBoCsyow0E {
-    background: transparent !important;
+	background: transparent !important;
 }
 
 /* 2. Псевдо-элемент ::before - это наш слой с размытием (нижний слой "сэндвича"). */
@@ -335,13 +305,12 @@ section[data-test-id="PLAYERBAR_DESKTOP"] {
 
 /* 3. Контейнер с контентом. Поднимаем его НАД слоем с размытием (верхний слой "сэндвича"). */
 .TrackModal_modalContent__AzQPF {
-    position: relative; 
+	position: relative;
 }
 
-
 .SkmRK9N2oP2Ld9uR2I_N {
-    -webkit-backdrop-filter: blur(var(--blur-depth));
-    backdrop-filter: var(--blur-depth);
+	-webkit-backdrop-filter: blur(var(--blur-depth));
+	backdrop-filter: var(--blur-depth);
 }
 
 /* Слайдер времени */
@@ -357,60 +326,45 @@ section[data-test-id="PLAYERBAR_DESKTOP"] {
 }
 
 [data-test-id="QUALITY_SETTINGS_CONTEXT_MENU"] {
-	height: 700px;
 	margin-bottom: 0px;
 	background: transparent !important;
-    -webkit-appearance: none;
-    appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
 }
 
-/* --- НАЧАЛО: Стилизация слайдеров акцентным цветом (ИСПРАВЛЕНО) --- */
 
-/* 
-  Слайдеры в Яндекс.Музыке стилизуются с помощью нескольких слоев:
-  - Прозрачный <input type="range"> для взаимодействия.
-  - Отдельный <div> для отрисовки дорожки прогресса.
-  Мы стилизуем этот <div> и ручку (thumb) самого <input>.
-*/
+/* --- IX. Стилизация слайдеров --- */
 
-/* Сами input'ы делаем полностью прозрачными, чтобы они не мешали */
 [data-test-id="TRACK_LYRICS_TEXT"]::after {
 	background: none !important;
 }
 
 [data-test-id="TIMECODE_SLIDER"],
 [data-test-id="CHANGE_VOLUME_SLIDER"] {
-    background: transparent !important;
-    -webkit-appearance: none;
-    appearance: none;
+	background: transparent !important;
+	-webkit-appearance: none;
+	appearance: none;
 }
-
-/* 
-  Вот эти классы отвечают за ВИДИМУЮ ЧАСТЬ дорожки (прогресс).
-  Применяем к ним акцентный цвет.
-*/
 
 .ChangeTimecodeBackground_thumb__vx6J0,
 .ChangeTimecodeBackground_progressbar__M93Ie::before,
 .PlayerBarDesktopWithBackgroundProgressBar_progressBar___Q6eK::before {
 	nav-left: 10px;
-    background-color: var(--accent-color, #8a63b3) !important;
-    height: 5px !important;
-    margin-top: -5px;
+	background-color: var(--accent-color, #8a63b3) !important;
+	height: 5px !important;
+	margin-top: -5px;
 	height: calc(50% - 28px) !important;
 }
 
 .ChangeVolume_wrapperSlider__9S1Vi {
 	background: transparent !important;
-    background-color: #8a63b300;
+	background-color: #8a63b300;
 	height: 100% !important;
 	border-radius: 20px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: #fff1;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #fff1;
 }
-
-/* --- КОНЕЦ: Стилизация слайдеров акцентным цветом --- */
 
 .ChangeTimecodeBackground_thumb__vx6J0 {
 	cursor: grab;
@@ -450,18 +404,18 @@ section[data-test-id="PLAYERBAR_DESKTOP"] {
 
 [data-test-id="TIMECODE_SLIDER"]::-moz-range-thumb,
 [data-test-id="CHANGE_VOLUME_SLIDER"]::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    background: var(--accent-color, #8a63b3);
-    border: 2px solid #ffffff;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+	width: 16px;
+	height: 16px;
+	background: var(--accent-color, #8a63b3);
+	border: 2px solid #ffffff;
+	border-radius: 50%;
+	cursor: pointer;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+	transition: transform 0.2s ease-in-out;
 }
 
-/* --- КОНЕЦ: Стилизация слайдеров акцентным цветом --- */
 
-/* --- НАЧАЛО: Стилизация "Хамелеон" через CSS-переменные --- */
+/* --- X. Динамические стили "Хамелеон" --- */
 
 /* 
   Задаем плавный переход для всех элементов, которые будут менять цвет.
@@ -485,42 +439,37 @@ button[data-test-id="PLAY_BUTTON"] {
 
 /* Кнопка PAUSE */
 button[data-test-id="PAUSE_BUTTON"] {
-    background-color: var(--light-vibrant-color, #fff) !important;
-    color: var(--dark-vibrant-color, #000) !important;
+	background: var(--accent-color, #fff1) !important;
+	color: var(--dark-vibrant-color, #000) !important;
+	transition: background 0.7s ease, color 0.7s ease !important;
 }
 
 /* Кнопка PLAY */
 button[data-test-id="PLAY_BUTTON"] {
-    color: var(--light-muted-color, #b0b0b0);
-    border-color: var(--light-muted-color, #b0b0b0) !important;
+	background: var(--accent-color, #fff1) !important;
+	color: var(--dark-vibrant-color, #000) !important;
+	transition: background 0.7s ease, color 0.7s ease !important;
 }
 
-/* --- КОНЕЦ: Стилизация "Хамелеон" через CSS-переменные --- */
 
-/* --- НАЧАЛО: Оптимизация цвета кнопки "Лайк" --- */
-/*
-  Автоматически применяем акцентный цвет к кнопке, когда она активна (нажата).
-  Это правило заменяет собой целый блок "шпиона" из script.js.
-*/
 button[data-test-id="LIKE_BUTTON"] {
-    color: var(--accent-color, #8a63b3) !important;
-	transition: filter 0.2s ease, color 0.7s ease;
+	color: var(--accent-color, #8a63b3) !important;
+	transition: filter 0.2s ease, color 0.7s ease, transform 0.2s ease-in-out;
 }
 
 button[data-test-id="LIKE_BUTTON"]:hover {
-    filter: brightness(1.1);
+	filter: brightness(1.1);
+	transform: scale(1.1);
 }
-/* --- КОНЕЦ: Оптимизация цвета кнопки "Лайк" --- */
 
-/* --- ИСПРАВЛЕНИЕ: Убираем градиент с текста песни (точная версия) --- */
+
+/* --- XI. Прочие стили и исправления --- */
+
 .MsLY_qiKofQrwKAr98EC::after {
-    display: none !important;
+	display: none !important;
 }
 
-.VibeAnimation_enter_done__Oi2Kz
-{
-    opacity: 0;
-}
+
 
 .PlayerBarDesktopWithBackgroundProgressBar_player__ASKKs
 {
@@ -529,3 +478,105 @@ button[data-test-id="LIKE_BUTTON"]:hover {
 	transition: border-color 0.7s ease, box-shadow 0.7s ease;
 }
 
+button[data-test-id="FULLSCREEN_PLAYER_BUTTON"] {
+	color: var(--accent-color, #8a63b3) !important;
+	transition: filter 0.2s ease, color 0.7s ease, transform 0.2s ease-in-out;
+}
+
+[data-test-id="MY_VIBE_PLAY_BUTTON"] {
+	transition: filter 0.2s ease, color 0.7s ease, transform 0.2s ease-in-out;
+}
+
+.InnerHeader_root_sticky__baN8o,
+.InnerHeader_root_withChildren__rLTCN {
+	background-color: rgba(25, 25, 25, 0.30) !important; 
+    backdrop-filter: blur(1vh) !important;
+    border-radius: 12px; /* Скругляем углы */
+}
+
+.PlaylistFilters_filter__s_myh {
+	background-color: var(--accent-color, #8a63b3) !important;
+    backdrop-filter: blur(1vh) !important;
+    border-radius: 8px; /* Скругляем углы */
+	transition: filter 0.3s ease-in-out, color 0.7s ease, transform 0.3s ease-in-out;
+}
+
+.PlaylistFilters_filter_selected__y3GuB {
+	background-color: #16161660 !important;
+}
+
+button[data-test-id="MY_VIBE_PAUSE_BUTTON"] {
+	/* color: var(--accent-color, #8a63b3) !important; */
+	transition: filter 0.3s ease-in-out, color 0.7s ease, transform 0.3s ease-in-out;
+}
+
+.UserProfile_plusLink__NhVsU:hover {
+	transform: scale(1.1);
+	transition: filter 0.3s ease-in-out, color 0.7s ease, transform 0.3s ease-in-out;
+}
+
+.UserID-Avatar, .UserID-Avatar_plus, .UserID-Avatar_dark, .UserID-Badge:hover {
+	transform: rotate(-1turn);
+	transition: filter 0.3s ease-in-out, color 0.7s ease, transform 0.7s ease-in-out;
+}
+
+.PlayButton_icon__t_THQ {
+	color: var(--accent-color, #8a63b3) !important;
+}
+
+.SearchPage_content__Ax9D6 {
+	background-color: rgba(25, 25, 25, 0) !important;
+}
+
+.SearchPage_header__T2OUM {
+	background: 0;
+	background-color: #16161660 !important;
+	height: 130px !important;
+	border-radius: 8px;
+}
+
+.PlaylistFilters_filter_selected__y3GuB {
+	background-color: #16161660 !important;
+}
+
+[data-test-id="TAB"] {
+	border-radius: 8px;
+    background: rgba(255, 255, 255, 0.404);
+	
+}
+
+.d50IqTKJZhJIMd5aTqAn {
+	background-color: var(--accent-color, #8a63b3) !important;
+	backdrop-filter: blur(1vh) !important;
+	border-radius: 8px;
+	transition: filter 0.3s ease-in-out, color 0.7s ease, transform 0.3s ease-in-out;
+}
+
+.StickyHeader_root_scrolling__EH9LA .StickyHeader_backdrop__fCnOw, .TextHeader_stickyItem__WF2hh, .TextHeader_stickyItem_scrolling__YPBOL {
+	backdrop-filter: blur(1vh) brightness(100%) saturate(140%) !important;
+}
+
+/* акцтивируеться при светлом */
+.Tab_title__hAYZk {
+	color: #000000 !important;
+	transition: filter 0.3s ease-in-out, color 0.7s ease, transform 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1.0);
+    }
+    50% {
+        transform: scale(1.03);
+    }
+    100% {
+        transform: scale(1.0);
+    }
+}
+
+.pulsing-background {
+    animation: pulse 1.2s infinite ease-in-out;
+    transition: transform 0.15s ease-out;
+}
+
+.VibeAnimation_enter_activej0jOl, .VibeAnimation_enter_doneOi2Kz, .VibeAnimation_exit__ioGXk {opacity: 0}

@@ -1,66 +1,148 @@
-// --- НАЧАЛО: БЛОК CHAMELEON (ОТКАЗОУСТОЙЧИВАЯ ВЕРСИЯ) ---
-/*--------------------------------------------*/
-// Функция для однократной загрузки библиотеки Vibrant.js
+let isActivating = false;
+/**
+ * @file ChromaSync Theme Script
+ * @description Этот скрипт управляет всей динамической функциональностью темы ChromaSync:
+ *              - Извлекает цвета из обложек треков.
+ *              - Управляет фоновым изображением и его эффектами.
+ *              - Применяет пользовательские настройки из handleEvents.json.
+ *              - Оптимизирует производительность и исправляет различные баги интерфейса.
+ */
+
+
+
+
+
+/* --- Блок 1: Извлечение цвета из обложки (Vibrant.js) --- */
+
+// Глобальная переменная для хранения последней извлеченной палитры.
+let lastPalette = null;
+
+/**
+ * Асинхронно загружает библиотеку Vibrant.js с CDN, если она еще не загружена.
+ * @returns {Promise<void>} Promise, который разрешается после загрузки скрипта.
+ */
 const loadVibrantScript = () => {
     return new Promise((resolve, reject) => {
-        // Если библиотека уже загружена, ничего не делаем
         if (window.Vibrant) return resolve();
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js';
-        script.onload = () => { console.log('[Chameleon] Библиотека Vibrant.js успешно загружена.'); resolve(); };
-        script.onerror = (e) => { console.error('[Chameleon] Не удалось загрузить Vibrant.js'); reject(e); };
+        script.onload = () => {
+            console.log('[ChromaSync] Библиотека Vibrant.js успешно загружена.');
+            resolve();
+        };
+        script.onerror = (e) => {
+            console.error('[ChromaSync] Не удалось загрузить Vibrant.js', e);
+            reject(e);
+        };
         document.head.appendChild(script);
     });
 };
 
-const applyChameleonStyles = (palette) => {
-    // Получаем цвета из ПОЛНОЦЕННОГО объекта палитры
-    const vibrantColor = palette.Vibrant?.getHex() || palette.LightVibrant?.getHex() || '#8a63b3';
+/**
+ * Применяет извлеченные или заданные вручную цвета к CSS-переменным.
+ * Также управляет цветом текста на табах для лучшей читаемости.
+ * @param {object} palette - Палитра цветов, полученная от Vibrant.js.
+ * @param {string} sourceChoice - Выбор пользователя, какой цвет из палитры использовать (e.g., 'Vibrant', 'Muted').
+ */
+const applyChameleonStyles = (palette, sourceChoice) => {
+    // Если включен ручной режим, используем цвет из настроек и выходим.
+    if (settings.useCustomAccentColor?.value) {
+        const customColor = settings.customAccentColor?.value || '#8a63b3';
+        document.documentElement.style.setProperty('--accent-color', customColor);
+        console.log(`[ChromaSync] Установлен ручной акцентный цвет: ${customColor}`);
+        return;
+    }
+
+    if (!palette) {
+        console.warn('[ChromaSync] Палитра не доступна (ручной режим выключен). Применение цвета отложено.');
+        return;
+    }
+
+    // Логика выбора основного акцентного цвета с резервными вариантами.
+    const finalSourceChoice = sourceChoice || 'Vibrant';
+    const fallbackSources = ['Vibrant', 'LightVibrant', 'DarkVibrant', 'Muted', 'LightMuted', 'DarkMuted'];
+    let accentSwatch = palette[finalSourceChoice];
+    if (!accentSwatch) {
+        for (const source of fallbackSources) {
+            if (palette[source]) {
+                accentSwatch = palette[source];
+                console.warn(`[ChromaSync] Цвет '${finalSourceChoice}' не найден. Использован резервный: '${source}'.`);
+                break;
+            }
+        }
+    }
+
+    if (!accentSwatch) {
+        console.error('[ChromaSync] В палитре не найдено подходящих цветов.');
+        return;
+    }
+
+    // Установка CSS-переменных на основе палитры.
+    const vibrantColor = accentSwatch.getHex();
     const lightVibrantColor = palette.LightVibrant?.getHex() || palette.Vibrant?.getHex() || '#ffffff';
     const darkVibrantColor = palette.DarkVibrant?.getHex() || palette.DarkMuted?.getHex() || '#000';
     const lightMutedColor = palette.LightMuted?.getHex() || palette.Muted?.getHex() || '#b0b0b0';
 
-    // Устанавливаем все цвета как CSS-переменные
     const rootStyle = document.documentElement.style;
     rootStyle.setProperty('--accent-color', vibrantColor);
     rootStyle.setProperty('--light-vibrant-color', lightVibrantColor);
     rootStyle.setProperty('--dark-vibrant-color', darkVibrantColor);
     rootStyle.setProperty('--light-muted-color', lightMutedColor);
-
     rootStyle.setProperty('--ym-controls-color-secondary-text-enabled', darkVibrantColor, 'important');
     rootStyle.setProperty('--ym-controls-color-secondary-on_default-hovered', darkVibrantColor, 'important');
     rootStyle.setProperty('--ym-controls-color-secondary-on_default-enabled', darkVibrantColor, 'important');
 
-    console.log('[Chameleon] CSS-переменные цвета обновлены.');
+    console.log(`[ChromaSync] Акцентный цвет ('${finalSourceChoice}') и CSS-переменные обновлены.`);
+
+    // Динамический подбор цвета текста на табах для контрастности.
+    const luminance = getLuminance(vibrantColor);
+    const tabTextColor = luminance > 0.7 ? '#000000' : '#FFFFFF';
+    let tabStyleElement = document.getElementById('dynamic-tab-color-style');
+    if (!tabStyleElement) {
+        tabStyleElement = document.createElement('style');
+        tabStyleElement.id = 'dynamic-tab-color-style';
+        document.head.appendChild(tabStyleElement);
+    }
+    tabStyleElement.textContent = `
+        .Tab_title__hAYZk { color: ${tabTextColor} !important; }
+    `;
+    console.log(`[ChromaSync] Яркость акцента: ${luminance.toFixed(2)}. Цвет текста табов: ${tabTextColor}`);
 };
 
-// Финальная версия главной функции с таймаутом
+/**
+ * Главная функция для обновления цветов темы. Загружает Vibrant.js,
+ * получает палитру и вызывает applyChameleonStyles.
+ * @param {string} imageUrl - URL обложки для анализа.
+ */
 const updateChameleonColors = async (imageUrl) => {
     try {
         await loadVibrantScript();
-
-        // Создаем "гонку": либо Vibrant.js успевает за 8 секунд, либо мы прерываем его
+        // Устанавливаем таймаут на случай, если Vibrant.js "зависнет".
         const palette = await Promise.race([
             Vibrant.from(imageUrl).getPalette(),
             new Promise((_, reject) => 
                 setTimeout(() => reject(new Error('Vibrant.js timed out after 8 seconds')), 8000)
             )
         ]);
-
-        console.log('[Chameleon] Палитра получена:', palette);
-        applyChameleonStyles(palette);
-
+        console.log('[ChromaSync] Палитра получена:', palette);
+        lastPalette = palette;
+        applyChameleonStyles(palette, settings.accentColorSource?.value);
     } catch (error) {
-        console.error('[Chameleon] Ошибка в цепочке обновления цветов:', error.message);
+        console.error('[ChromaSync] Ошибка в цепочке обновления цветов:', error.message);
     }
 };
-/*--------------------------------------------*/
-// --- КОНЕЦ БЛОКА CHAMELEON ---
 
 
-// Фоновая картинка с параллаксом (Версия 2, Двухслойная) (ИСПРАВЛЕНО)
-/*--------------------------------------------*/
-// --- НОВОЕ: Функция Debounce для предотвращения "дребезга" ---
+/* --- Блок 2: Вспомогательные утилиты --- */
+
+/**
+ * Создает debounced-версию функции, которая откладывает свой вызов
+ * до тех пор, пока не пройдет `delay` миллисекунд без вызовов.
+ * Полезно для ресурсоемких операций, запускаемых по частым событиям.
+ * @param {Function} func - Исходная функция.
+ * @param {number} delay - Задержка в миллисекундах.
+ * @returns {Function} Debounced-версия функции.
+ */
 const debounce = (func, delay) => {
     let timeoutId;
     return (...args) => {
@@ -71,7 +153,28 @@ const debounce = (func, delay) => {
     };
 };
 
-// --- НОВОЕ: Функция Throttle для ограничения частоты вызовов ---
+/**
+ * Вычисляет воспринимаемую яркость HEX-цвета (от 0 до 1).
+ * @param {string} hex - Цвет в формате HEX (e.g., '#RRGGBB').
+ * @returns {number} Значение яркости.
+ */
+const getLuminance = (hex) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!result) return 0;
+    const r = parseInt(result[1], 16);
+    const g = parseInt(result[2], 16);
+    const b = parseInt(result[3], 16);
+    // Стандартная формула для расчета яркости.
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+};
+
+/**
+ * Ограничивает частоту вызовов функции до одного раза в `limit` миллисекунд.
+ * Полезно для обработки событий, которые срабатывают слишком часто (например, mousemove).
+ * @param {Function} func - Исходная функция.
+ * @param {number} limit - Интервал ограничения в миллисекундах.
+ * @returns {Function} Throttled-версия функции.
+ */
 const throttle = (func, limit) => {
     let inThrottle;
     return function() {
@@ -85,18 +188,27 @@ const throttle = (func, limit) => {
     };
 };
 
-let fallbackTimeoutId = null; 
-let currentImgBackground = "";
-let currentTrackTitle = ""; // НОВОЕ: Переменная для хранения названия трека
+
+/* --- Блок 3: Управление фоном (обложка, параллакс) --- */
+
 let bgLayer1, bgLayer2;
 let activeLayer, inactiveLayer;
+const parallaxIntensity = 25; // Интенсивность эффекта параллакса.
 
-const parallaxIntensity = 25;
-
+/**
+ * Обрабатывает движение мыши для создания эффекта параллакса на фоне.
+ * @param {MouseEvent} event - Событие движения мыши.
+ */
 const handleParallax = (event) => {
     if (!bgLayer1 || !bgLayer2) return;
-    const { clientX, clientY } = event;
-    const { innerWidth, innerHeight } = window;
+    const {
+        clientX,
+        clientY
+    } = event;
+    const {
+        innerWidth,
+        innerHeight
+    } = window;
     const offsetX = (clientX / innerWidth) - 0.5;
     const offsetY = (clientY / innerHeight) - 0.5;
     const newX = `calc(50% + ${offsetX * parallaxIntensity}px)`;
@@ -107,6 +219,11 @@ const handleParallax = (event) => {
     });
 };
 
+/**
+ * Создает один из слоев для фона.
+ * @param {string} zIndex - z-index для создаваемого слоя.
+ * @returns {HTMLElement} Созданный div-элемент.
+ */
 const createLayer = (zIndex) => {
     const layer = document.createElement('div');
     layer.style.position = 'fixed';
@@ -118,187 +235,205 @@ const createLayer = (zIndex) => {
     layer.style.backgroundSize = 'cover';
     layer.style.backgroundPosition = 'center center';
     layer.style.opacity = '0';
-    layer.style.transition = 'opacity 1s ease, background-position 0.2s ease-out';
-    layer.style.willChange = 'opacity, background-position, background-image';
-    layer.style.filter = 'blur(3px) brightness(0.5)';
+    layer.style.transition = 'opacity 0.6s ease, background-position 0.16s ease-out, transform 0.08s ease-out';
+    layer.style.willChange = 'opacity, background-position, background-image, filter';
+    const brightnessValue = settings.backgroundBrightness?.value ?? 0.5;
+    layer.style.filter = `blur(3px) brightness(${brightnessValue})`;
     document.body.appendChild(layer);
     return layer;
 };
 
+/* --- Блок 4: Эффект пульсации — удалён в Lite версии --- */
+
+
+/**
+ * Инициализирует два слоя для фона, если они еще не созданы.
+ * Настраивает эффект параллакса.
+ */
 const initializeBackgroundLayers = () => {
     if (bgLayer1) return;
-
     bgLayer1 = createLayer('-2');
     bgLayer2 = createLayer('-3');
-    
+    // Экспортируем слои во внешний мир для beat-pulse.js
+    window.bgLayer1 = bgLayer1;
+    window.bgLayer2 = bgLayer2;
     activeLayer = bgLayer1;
     inactiveLayer = bgLayer2;
-
     window.addEventListener('mousemove', throttle(handleParallax, 33));
-    
-    // Загружаем Vibrant.js при первой инициализации, чтобы он был готов
     loadVibrantScript();
-
     console.log('[ChromaSync] Двухслойная система фона с параллаксом инициализирована.');
 };
 
-const updateBackgroundImage = (imgBackground) => {
-    if (!activeLayer || inactiveLayer.style.backgroundImage.includes(imgBackground)) {
+/**
+ * Обновляет фоновое изображение с плавной сменой.
+ * Использует систему из двух слоев для кроссфейда.
+ * @param {string} imgBackground - URL нового фонового изображения.
+ * @param {number} callId - Уникальный ID вызова, чтобы предотвратить "состояние гонки".
+ */
+const updateBackgroundImage = (imgBackground, callId) => {
+    if (!activeLayer || activeLayer.style.backgroundImage.includes(imgBackground)) {
         return;
     }
 
     const img = new Image();
-    img.crossOrigin = "Anonymous"; // <-- Важно для анализа картинки с другого домена
+    img.crossOrigin = "Anonymous"; // Необходимо для анализа картинки с другого домена.
     img.src = imgBackground;
 
     img.onload = () => {
+        // Проверка на актуальность: если ID вызова устарел, игнорируем его.
+        if (callId !== lastCoverChangeId) {
+            console.log(`[ChromaSync] Игнорирую устаревшую обложку (ID вызова: ${callId}, текущий ID: ${lastCoverChangeId})`);
+            return;
+        }
         inactiveLayer.style.backgroundImage = `url(${imgBackground})`;
         requestAnimationFrame(() => {
             inactiveLayer.style.opacity = '1';
         });
         setTimeout(() => {
+            // Дополнительная проверка на случай смены трека во время анимации.
+            if (callId !== lastCoverChangeId) {
+                console.log(`[ChromaSync] Отменяю устаревшую анимацию (ID вызова: ${callId}, текущий ID: ${lastCoverChangeId})`);
+                return;
+            }
             activeLayer.style.opacity = '0';
             const temp = activeLayer;
             activeLayer = inactiveLayer;
             inactiveLayer = temp;
-        }, 500); // ИЗМЕНЕНО: Анимация ускорена с 1100 до 500 мс
-        // Вызываем обновление цветов "Хамелеона" только после загрузки нового фона
-        updateChameleonColors(imgBackground); 
+        }, 500);
     };
     img.onerror = () => {
         console.error('[ChromaSync] Не удалось загрузить изображение для фона:', imgBackground);
     };
 };
 
-const handleCoverChange = (coverElement) => {
-    clearTimeout(fallbackTimeoutId); 
 
-    // НОВОЕ: Получаем название трека
-    const playerBar = coverElement.closest('[class*="PlayerBarDesktop_playerBar__"]');
-    const titleElement = playerBar ? playerBar.querySelector('.Track_title__9u_DA') : null;
-    const newTrackTitle = titleElement ? titleElement.textContent : null;
+/* --- Блок 4: Логика смены обложки и главный наблюдатель --- */
 
-    const newSrc = coverElement.src;
-    if (newSrc && newSrc.includes('/100x100')) {
-        const newImgBackground = newSrc.replace('/100x100', '/1000x1000');
-        
-        // ИЗМЕНЕНО: Проверяем и обложку, и название трека
-        if (newImgBackground !== currentImgBackground || (newTrackTitle && newTrackTitle !== currentTrackTitle)) {
+let currentImgBackground = ""; // URL текущей обложки.
+let lastCoverChangeId = 0; // Уникальный ID для каждого запроса на смену обложки.
+const debouncedColorUpdate = debounce(updateChameleonColors, 400); // Debounced-версия для анализа цвета.
+
+/**
+ * Надежно ищет URL текущей обложки на странице в нескольких местах.
+ * @returns {string|null} URL обложки или null, если не найдена.
+ */
+const coverURL = () => {
+    // Внутренняя функция для проверки, является ли URL заглушкой.
+    const isPlaceholder = (src) => {
+        if (!src) return true;
+        const lowerSrc = src.toLowerCase();
+        return lowerSrc.includes('default') ||
+            lowerSrc.includes('placeholder') ||
+            lowerSrc.includes('images/default/') ||
+            lowerSrc.includes('logo') ||
+            !lowerSrc.includes('/100x100') && !lowerSrc.includes('/1000x1000');
+    };
+
+    // Порядок поиска: мини-плеер, фуллскрин-плеер, запасной вариант.
+    const imgMini = document.querySelector('div[data-test-id="PLAYERBAR_DESKTOP_COVER_CONTAINER"] img');
+    if (imgMini?.src && !isPlaceholder(imgMini.src)) return imgMini.src;
+    const imgFull = document.querySelector('[data-test-id="FULLSCREEN_PLAYER_MODAL"] img[data-test-id="ENTITY_COVER_IMAGE"]');
+    if (imgFull?.src && !isPlaceholder(imgFull.src)) return imgFull.src;
+    const any = document.querySelector('img[data-test-id="ENTITY_COVER_IMAGE"]');
+    if (any?.src && !isPlaceholder(any.src)) return any.src;
+
+    console.log('[ChromaSync] Обложка не найдена или это плейсхолдер.');
+    return null;
+};
+
+/**
+ * Главный обработчик, который запускается при потенциальной смене обложки.
+ */
+const handleCoverChange = () => {
+    const newSrc = coverURL();
+    if (!newSrc) return;
+
+    // Преобразуем URL в версию высокого разрешения.
+    const newImgBackground = newSrc.includes('/100x100') ?
+        newSrc.replace('/100x100', '/1000x1000') :
+        newSrc;
+
+    if (newImgBackground !== currentImgBackground) {
             currentImgBackground = newImgBackground;
-            currentTrackTitle = newTrackTitle; // Обновляем запомненное название
+        lastCoverChangeId++; // Увеличиваем ID, чтобы отменить предыдущие операции.
+        const currentCallId = lastCoverChangeId;
 
-            initializeBackgroundLayers();
-            updateBackgroundImage(newImgBackground);
+        initializeBackgroundLayers();
+        updateBackgroundImage(newImgBackground, currentCallId); // Немедленное обновление фона.
+        debouncedColorUpdate(newImgBackground); // Отложенное обновление цвета.
 
-            // УЛУЧШЕННЫЙ страховочный механизм
-            fallbackTimeoutId = setTimeout(() => {
-                const latestCoverElement = document.querySelector('[class*="PlayerBarDesktopWithBackgroundProgressBar_cover__MKmEt"]');
-                if (latestCoverElement) {
-                    const latestExpectedBg = latestCoverElement.src.replace('/100x100', '/1000x1000');
-                    const currentAccentColor = document.documentElement.style.getPropertyValue('--accent-color');
-                    
-                    // Проверяем, что трек все еще тот же И (фон не обновился ИЛИ цвет не обновился)
-                    if (latestExpectedBg === newImgBackground && 
-                       (!activeLayer || !activeLayer.style.backgroundImage.includes(newImgBackground) || !currentAccentColor)) {
-                         console.log('[ChromaSync] Страховочный механизм: Обнаружена рассинхронизация через 10 сек. Принудительное обновление...');
-                         updateBackgroundImage(newImgBackground); // Перезапускаем всю цепочку
-                    }
-                }
-            }, 10000);
-        }
+        console.log(`[ChromaSync] Обложка изменилась (ID ${currentCallId}). Фон обновляется, цвет запланирован.`);
     }
 };
 
-// --- НОВОЕ: Создаем debounced-версию обработчика ---
-const debouncedHandleCoverChange = debounce(handleCoverChange, 700);
-
-// --- НАЧАЛО: Отказоустойчивый наблюдатель за обложкой ---
-
-// WeakSet для отслеживания уже наблюдаемых элементов, чтобы избежать дублирования
-// и утечек памяти (элемент автоматически удаляется из сета при удалении из DOM).
-const observedCovers = new WeakSet();
-
-// Эта функция будет вызываться для каждой найденной (и еще не наблюдаемой) обложки
-const setupObserverForCover = (coverElement) => {
-    if (observedCovers.has(coverElement)) {
-        return; // Уже наблюдаем, ничего не делаем
-    }
-
-    console.log('[ChromaSync] Обнаружен новый элемент обложки. Начинаю наблюдение.');
-    observedCovers.add(coverElement); // "Запоминаем" этот элемент
-
-    // Запускаем обработку для текущей обложки
-    // Если это первая загрузка, вызов будет немедленным, иначе - с задержкой
-    if (document.readyState === 'loading') {
-         handleCoverChange(coverElement);
-    } else {
-         debouncedHandleCoverChange(coverElement);
-    }
-    
-    // Создаем персонального наблюдателя за атрибутом 'src'
-    const attributeObserver = new MutationObserver((mutations) => {
-        mutations.forEach(mutation => {
-            if (mutation.attributeName === 'src') {
-                debouncedHandleCoverChange(mutation.target);
+/**
+ * Наблюдатель за изменениями в DOM.
+ * Оптимизирован для срабатывания только при изменениях, связанных с <img>.
+ * @type {MutationObserver}
+ */
+const mainObserver = new MutationObserver((mutationsList) => {
+    // Проверяем, есть ли в мутациях то, что нас интересует.
+    const isRelevant = mutationsList.some(mutation => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'src' && mutation.target.tagName === 'IMG') {
+            return true; // Изменился src у картинки.
+        }
+        if (mutation.type === 'childList') {
+            const checkNodes = (nodeList) => { // Добавлена или удалена картинка.
+                for (const node of nodeList) {
+                    if (node.nodeType !== 1) continue;
+                    if (node.tagName === 'IMG' || node.querySelector('img')) return true;
+                }
+                return false;
+            };
+            if (checkNodes(mutation.addedNodes) || checkNodes(mutation.removedNodes)) {
+                return true;
             }
-        });
-    });
-    attributeObserver.observe(coverElement, { attributes: true, attributeFilter: ['src'] });
-};
-
-// Главный, "неусыпный" наблюдатель, который ищет появление новых обложек в DOM
-const mainCoverObserver = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-        if (mutation.addedNodes) {
-            mutation.addedNodes.forEach(node => {
-                if (node.nodeType !== 1) return; // Пропускаем все, что не является элементом
-
-                // Ищем обложку либо в самом добавленном узле, либо среди его детей
-                const cover = node.matches('[class*="PlayerBarDesktopWithBackgroundProgressBar_cover__MKmEt"]')
-                    ? node
-                    : node.querySelector('[class*="PlayerBarDesktopWithBackgroundProgressBar_cover__MKmEt"]');
-                
-                if (cover) {
-                    setupObserverForCover(cover);
-                }
-            });
         }
-    }
+        return false;
+    });
+
+    if (isRelevant) {
+        handleCoverChange();
+}
 });
 
-// Сразу ищем обложку при запуске скрипта
-const initialCover = document.querySelector('[class*="PlayerBarDesktopWithBackgroundProgressBar_cover__MKmEt"]');
-if (initialCover) {
-    setupObserverForCover(initialCover);
-}
+// Запускаем наблюдатель.
+mainObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+    attributeFilter: ['src'] // Следим только за атрибутом 'src'.
+});
 
-// Запускаем главный наблюдатель, который будет работать ПОСТОЯННО
-mainCoverObserver.observe(document.body, { childList: true, subtree: true });
 
-/*--------------------------------------------*/
-// --- КОНЕЦ БЛОКА ФОНОВОЙ КАРТИНКИ ---
+/* --- Блок 5: Исправления багов интерфейса Яндекс.Музыки --- */
 
-// Отключение тупого даблклика (ИСПРАВЛЕНО)
-/*--------------------------------------------*/
+/**
+ * Блокирует стандартное поведение двойного клика на плеере,
+ * которое открывает полноэкранный режим.
+ * @param {HTMLElement} element - Элемент, на который вешается блокировщик.
+ */
 const attachDoubleClickBlocker = (element) => {
     element.addEventListener('dblclick', (event) => {
         event.preventDefault();
         event.stopPropagation();
-    }, { capture: true, once: true }); // Используем once: true, чтобы слушатель автоматически удалился после первого вызова, если нужно, но здесь важнее capture
+    }, {
+        capture: true,
+        once: true
+    });
     console.log('[ChromaSync] Блокировщик двойного клика установлен на PlayerBar.');
 };
 
+// Наблюдатель для поиска плеера и установки блокировщика.
 const dblClickObserver = new MutationObserver((mutationsList, observer) => {
     for (const mutation of mutationsList) {
         if (mutation.addedNodes) {
             mutation.addedNodes.forEach(node => {
-                if (node.nodeType === 1) { // Убедимся, что это элемент
+                if (node.nodeType === 1) {
                     const playerBar = node.matches('.PlayerBar_root__cXUnU') ? node : node.querySelector('.PlayerBar_root__cXUnU');
                     if (playerBar) {
                         attachDoubleClickBlocker(playerBar);
-                        // Как только нашли и обработали, можно перестать наблюдать.
-                        // Это экономит ресурсы.
-                        observer.disconnect(); 
+                        observer.disconnect(); // Нашли, обработали, отключились.
                     }
                 }
             });
@@ -306,56 +441,49 @@ const dblClickObserver = new MutationObserver((mutationsList, observer) => {
     }
 });
 
-// Пробуем найти элемент сразу. Если его нет, запускаем наблюдателя.
+// Сначала ищем элемент сразу, если не находим - запускаем наблюдатель.
 const initialPlayerBar = document.querySelector('.PlayerBar_root__cXUnU');
 if (initialPlayerBar) {
     attachDoubleClickBlocker(initialPlayerBar);
 } else {
-    dblClickObserver.observe(document.body, { childList: true, subtree: true });
+    dblClickObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 }
-/*--------------------------------------------*/
 
-
-// Авто смена темы Яндекс Музыки на тёмную (ИСПРАВЛЕНО)
-/*--------------------------------------------*/
-// Функция для принудительной установки темной темы
+/**
+ * Принудительно устанавливает темную тему оформления.
+ * Это нужно, чтобы стили темы всегда работали корректно.
+ */
 const forceDarkTheme = () => {
     const body = document.body;
-    // Проверяем, если светлая тема активна, меняем ее на темную.
     if (body.classList.contains('ym-light-theme')) {
         body.classList.replace('ym-light-theme', 'ym-dark-theme');
-    } 
-    // Если вообще никакой темы нет, добавляем темную.
-    else if (!body.classList.contains('ym-dark-theme') && !body.classList.contains('ym-light-theme')) {
+    } else if (!body.classList.contains('ym-dark-theme')) {
         body.classList.add('ym-dark-theme');
     }
 };
 
-// Создаем наблюдателя, который следит за изменениями атрибута class у <body>
+// Наблюдатель, который следит, чтобы тема не переключалась обратно на светлую.
 const themeObserver = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-            // Если класс изменился, проверяем, не нужно ли снова включить темную тему
             forceDarkTheme();
         }
     }
 });
+themeObserver.observe(document.body, {
+    attributes: true
+});
+forceDarkTheme(); // Устанавливаем тему сразу при запуске.
 
-// Начинаем наблюдение за <body>
-themeObserver.observe(document.body, { attributes: true });
-
-// Однократно вызываем функцию при запуске скрипта, чтобы установить тему сразу
-forceDarkTheme();
-/*--------------------------------------------*/
-
-
-// МЕНЯЙТЕ ЦВЕТ!!!
-/*--------------------------------------------*/
+/**
+ * Этот блок кода создает CSS-правила, чтобы фон некоторых модальных окон
+ * наследовал цвет от специальной CSS-переменной, вместо стандартного белого/серого.
+ */
 const css = `
-:root {
-    --background-color: #000;
-}
-
+:root { --background-color: #000; }
 .TrackLyricsModal_root__KsVRf,
 .QualitySettingsModal_root__f3gE2,
 .QualitySettingsContextMenu_root_withEqualizer__GPjIg,
@@ -364,13 +492,14 @@ const css = `
     background-color: var(--background-color);
 }
 `;
-
 const style = document.createElement('style');
 style.appendChild(document.createTextNode(css));
 document.head.appendChild(style);
 
-/*--------------------------------------------*/
-// Функция для обновления CSS-переменной :root на основе цвета плеера
+/**
+ * Обновляет CSS-переменную --background-color на основе цвета плеера.
+ * @param {HTMLElement} playerBar - Элемент плеера.
+ */
 const updateRootBackgroundColor = (playerBar) => {
     const newColor = getComputedStyle(playerBar).getPropertyValue('--player-average-color-background').trim();
     if (newColor) {
@@ -378,18 +507,17 @@ const updateRootBackgroundColor = (playerBar) => {
     }
 };
 
-// Наблюдатель за появлением плеера, чтобы затем следить за его стилем
+// Наблюдатель, который ждет появления плеера, чтобы начать отслеживать его цвет.
 const playerBarObserver = new MutationObserver((mutationsList, observer) => {
     for (const mutation of mutationsList) {
         for (const node of mutation.addedNodes) {
             if (node.nodeType === 1 && node.matches('section.PlayerBar_root__cXUnU')) {
-                // Плеер найден. Запускаем обновление цвета и начинаем следить за его стилем.
                 updateRootBackgroundColor(node);
-                
                 const styleObserver = new MutationObserver(() => updateRootBackgroundColor(node));
-                styleObserver.observe(node, { attributes: true, attributeFilter: ['style'] });
-
-                // Мы нашли плеер, больше нет нужды его искать.
+                styleObserver.observe(node, {
+                    attributes: true,
+                    attributeFilter: ['style']
+                });
                 observer.disconnect();
                 return;
             }
@@ -397,205 +525,619 @@ const playerBarObserver = new MutationObserver((mutationsList, observer) => {
     }
 });
 
-// Попробуем найти плеер сразу при загрузке
+// Сначала ищем плеер сразу, если не находим - запускаем наблюдатель.
 const initialPlayerBarElement = document.querySelector('section.PlayerBar_root__cXUnU');
 if (initialPlayerBarElement) {
-    // Если плеер уже есть, обновляем цвет и начинаем следить за стилем
     updateRootBackgroundColor(initialPlayerBarElement);
     const styleObserver = new MutationObserver(() => updateRootBackgroundColor(initialPlayerBarElement));
-    styleObserver.observe(initialPlayerBarElement, { attributes: true, attributeFilter: ['style'] });
+    styleObserver.observe(initialPlayerBarElement, {
+        attributes: true,
+        attributeFilter: ['style']
+    });
 } else {
-    // Если плеера нет, ждем его появления
-    playerBarObserver.observe(document.body, { childList: true, subtree: true });
-}
-/*--------------------------------------------*/
-
-
-/*Управление handleEvents.json*/
-/*--------------------------------------------*/
-let settings = {};
-let lastAppliedSettings = {}; // НОВОЕ: для хранения последнего примененного состояния
-
-function log(text) {
-    console.log('[Customizable LOG]: ', text)
+    playerBarObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 }
 
-async function getSettings() {
-    try {
-        const response = await fetch("http://localhost:2007/get_handle?name=chromasync");
-        if (!response.ok) throw new Error(`Ошибка сети: ${response.status}`);
-        const data = await response.json();
-        if (!data?.data?.sections) {
-            console.warn("Структура данных не соответствует ожидаемой.");
-            return {};
+
+/* --- Блок 6: Управление настройками из PulseSync (handleEvents.json) --- */
+
+let settings = {}; // Глобальный объект с текущими настройками.
+let lastAppliedSettings = {}; // Объект для хранения последнего примененного состояния.
+
+
+/**
+ * Универсальная функция для применения CSS-стилей в ответ на изменение настроек.
+ * @param {string|string[]} settingKeys - Ключ или массив ключей настроек для отслеживания.
+ * @param {string} styleId - ID для элемента <style>, который будет создан или обновлен.
+ * @param {Function} cssGenerator - Функция, которая принимает значение настройки и возвращает CSS-строку.
+ */
+const updateStyleOnSettingChange = (settingKeys, styleId, cssGenerator) => {
+    const keys = Array.isArray(settingKeys) ? settingKeys : [settingKeys];
+    // Проверяем, изменилась ли хотя бы одна из отслеживаемых настроек.
+    const hasChanged = keys.some(key => {
+        const current = settings[key];
+        const last = lastAppliedSettings[key];
+        return current && (!last || current.value !== last.value);
+    });
+
+    if (hasChanged) {
+        let styleElement = document.getElementById(styleId);
+        if (!styleElement) {
+            styleElement = document.createElement('style');
+            styleElement.id = styleId;
+            document.head.appendChild(styleElement);
         }
-        return Object.fromEntries(data.data.sections.map(({ title, items }) => [
-            title,
-            Object.fromEntries(items.map(item => [
-                item.id,
-                item.bool ?? item.input ?? Object.fromEntries(item.buttons?.map(b => [b.name, b.text]) || [])
-            ]))
-        ]));
+        styleElement.textContent = cssGenerator(settings); // Генерируем и применяем CSS.
+        // Обновляем последние примененные настройки.
+        keys.forEach(key => {
+            if (settings[key]) {
+                lastAppliedSettings[key] = { ...settings[key] };
+            }
+        });
+        console.log(`[ChromaSync] Обновлен динамический стиль: ${styleId}`);
+    }
+};
+
+/**
+ * Загружает настройки из локального сервера PulseSync.
+ * @param {string} name - Имя темы (для URL).
+ * @returns {object|null} Объект с настройками или null в случае ошибки.
+ */
+async function getSettings(name) {
+    try {
+        const response = await fetch(`http://localhost:2007/get_handle?name=${name}`);
+        if (!response.ok) throw new Error(`Ошибка сети: ${response.status}`);
+        const {
+            data
+        } = await response.json();
+        if (!data?.sections) {
+            console.warn("Структура данных настроек не соответствует ожидаемой.");
+            return null;
+        }
+        return transformJSON(data);
     } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-        return {};
+        console.error(error);
+        return null;
+    }
+}
+
+/**
+ * Преобразует JSON-структуру от PulseSync в более удобный плоский объект.
+ * @param {object} data - Исходный JSON от PulseSync.
+ * @returns {object} Трансформированный объект настроек.
+ */
+function transformJSON(data) {
+    const result = {};
+    try {
+        data.sections.forEach(section => {
+            section.items.forEach(item => {
+                if (item.type === "text" && item.buttons) {
+                    result[item.id] = {};
+                    item.buttons.forEach(button => {
+                        result[item.id][button.name] = {
+                            value: button.text,
+                            default: button.defaultParameter
+                        };
+                    });
+                } else if (item.type === "selector") {
+                    const selectedIndex = item.selected ?? 0;
+                    const selectedValue = item.options[selectedIndex]?.id;
+                    result[item.id] = {
+                        value: selectedValue,
+                        default: item.defaultParameter
+                    };
+                } else {
+                    result[item.id] = {
+                        value: item.bool ?? item.input ?? item.value ?? item.filePath,
+                        default: item.defaultParameter
+                    };
+                }
+            });
+        });
+    } finally {
+        return result;
     }
 }
 
 let settingsDelay = 1000;
 let updateInterval;
 
+/**
+ * Главная функция, которая применяет все настройки к элементам страницы.
+ * @param {object} newSettings - Объект с новыми настройками.
+ */
 async function setSettings(newSettings) {
-    // Текст сверху
-    const themeTitleTextElement = document.querySelector('body > div.PSBpanel > p');
-    if (themeTitleTextElement && (Object.keys(settings).length === 0 || settings['Текст'].themeTitleText.text !== newSettings['Текст'].themeTitleText.text)) {
-        themeTitleTextElement.textContent = newSettings['Текст'].themeTitleText.text || 'ChromaSync';
+    if (!newSettings) {
+        console.warn('[ChromaSync] Попытка применить пустые настройки. Операция отменена.');
+        return;
     }
+    // Обновление заголовка темы
+    const titleGroup = newSettings.themeTitleText || newSettings.themeTitle;
+    const titleValue = (titleGroup && (titleGroup.text?.value ?? titleGroup.text ?? titleGroup.value)) || 'ChromaSync';
+    updatePSBTitleText(titleValue);
 
-    // globalPlayerColor
+    // Получение цвета плеера для других элементов (например, логотипа).
     const playerBarElement = document.querySelector('section.PlayerBar_root__cXUnU');
     let globalPlayerColor = '';
-    
     if (playerBarElement) {
         globalPlayerColor = playerBarElement.style.getPropertyValue('--player-average-color-background').trim();
     }
 
-    // --- ОПТИМИЗАЦИЯ ---
-    // Проверяем, изменились ли настройки, влияющие на этот блок стилей
-    const isFirstRun = !lastAppliedSettings.hasOwnProperty('Vibe-Block');
-    const vibeBlockChanged = !isFirstRun && lastAppliedSettings['Vibe-Block'].toggleFullscreenVibeBlock !== newSettings['Vibe-Block'].toggleFullscreenVibeBlock;
-    const logoColorSettingChanged = !isFirstRun && lastAppliedSettings['Logo'].toggleVariableNextLogoColor !== newSettings['Logo'].toggleVariableNextLogoColor;
-    const playerColorChanged = lastAppliedSettings.globalPlayerColor !== globalPlayerColor;
+    /* lite: no proDevOverride */
 
+    /* lite: no license buttons or auto-login */
+
+    // Комбинированный стиль для блоков, зависящих от нескольких настроек.
+    const isFirstRun = !lastAppliedSettings.hasOwnProperty('toggleFullscreenVibeBlock');
+    const vibeBlockChanged = !isFirstRun && lastAppliedSettings.toggleFullscreenVibeBlock.value !== newSettings.toggleFullscreenVibeBlock.value;
+    const logoColorSettingChanged = !isFirstRun && lastAppliedSettings.toggleVariableNextLogoColor.value !== newSettings.toggleVariableNextLogoColor.value;
+    const playerColorChanged = lastAppliedSettings.globalPlayerColor !== globalPlayerColor;
     if (isFirstRun || vibeBlockChanged || logoColorSettingChanged || playerColorChanged) {
-        // Комбинированный стиль
         let combinedStyle = document.getElementById('combined-style');
         if (!combinedStyle) {
             combinedStyle = document.createElement('style');
             combinedStyle.id = 'combined-style';
             document.head.appendChild(combinedStyle);
         }
-        
         combinedStyle.textContent = `
-            /*Фуллвайб*/
+            /* Размер блока "Моя волна" */
             .VibeBlock_root__z7LtR {
-                min-height: ${newSettings['Vibe-Block'].toggleFullscreenVibeBlock ? '79.8vh' : '400px'} !important;
-                max-height: ${newSettings['Vibe-Block'].toggleFullscreenVibeBlock ? '79.8vh' : '400px'} !important;
+                min-height: ${newSettings.toggleFullscreenVibeBlock.value ? '79.8vh' : '400px'} !important;
+                max-height: ${newSettings.toggleFullscreenVibeBlock.value ? '79.8vh' : '400px'} !important;
             }
             @media (min-width: 1079px) {
                 .VibeBlock_root__z7LtR {
-                    min-height: ${newSettings['Vibe-Block'].toggleFullscreenVibeBlock ? '84.2vh' : '400px'} !important;
-                    max-height: ${newSettings['Vibe-Block'].toggleFullscreenVibeBlock ? '84.2vh' : '400px'} !important;
+                    min-height: ${newSettings.toggleFullscreenVibeBlock.value ? '84.2vh' : '400px'} !important;
+                    max-height: ${newSettings.toggleFullscreenVibeBlock.value ? '84.2vh' : '400px'} !important;
                 }
             }
-
-            /*Транслого*/
+            /* Цвет логотипа */
             .NavbarDesktop_logo__Z4jGx * {
-                color: ${newSettings['Logo'].toggleVariableNextLogoColor ? globalPlayerColor : ''} !important;
-                filter: brightness(${newSettings['Logo'].toggleVariableNextLogoColor ? '1.4' : '1.0'}) !important;
+                color: ${newSettings.toggleVariableNextLogoColor.value ? globalPlayerColor : ''} !important;
+                filter: brightness(${newSettings.toggleVariableNextLogoColor.value ? '1.4' : '1.0'}) !important;
             }
         `;
-        // Сохраняем новое состояние
-        lastAppliedSettings['Vibe-Block'] = { ...newSettings['Vibe-Block'] };
-        lastAppliedSettings['Logo'] = { ...newSettings['Logo'] };
+        lastAppliedSettings.toggleFullscreenVibeBlock = { ...newSettings.toggleFullscreenVibeBlock };
+        lastAppliedSettings.toggleVariableNextLogoColor = { ...newSettings.toggleVariableNextLogoColor };
         lastAppliedSettings.globalPlayerColor = globalPlayerColor;
     }
 
+    // Мгновенное применение настроек акцентного цвета.
+    const accentSourceSetting = newSettings.accentColorSource;
+    const useCustomColorSetting = newSettings.useCustomAccentColor;
+    const customColorSetting = newSettings.customAccentColor;
+    const accentSourceChanged = accentSourceSetting && (!lastAppliedSettings.accentColorSource || lastAppliedSettings.accentColorSource.value !== accentSourceSetting.value);
+    const useCustomColorChanged = useCustomColorSetting && (!lastAppliedSettings.useCustomAccentColor || lastAppliedSettings.useCustomAccentColor.value !== useCustomColorSetting.value);
+    const customColorChanged = customColorSetting && (!lastAppliedSettings.customAccentColor || lastAppliedSettings.customAccentColor.value !== customColorSetting.value);
+    if (accentSourceChanged || useCustomColorChanged || customColorChanged) {
+        console.log('[ChromaSync] Настройки цвета изменены. Применяю немедленно.');
+        applyChameleonStyles(lastPalette, accentSourceSetting?.value);
+        if (accentSourceSetting) lastAppliedSettings.accentColorSource = { ...accentSourceSetting };
+        if (useCustomColorSetting) lastAppliedSettings.useCustomAccentColor = { ...useCustomColorSetting };
+        if (customColorSetting) lastAppliedSettings.customAccentColor = { ...customColorSetting };
+    }
 
-    // Open Blocker
-    const modules = [
-        "donations",
-        "concerts",
-        "userprofile",
-        "trailers",
-        "betabutton",
-        "relevantnow",
-        "artistrecommends",
-    ];
+    // Применение динамических стилей через универсальную функцию.
+    updateStyleOnSettingChange(
+        ['trackModalOpacity', 'globalSaturate', 'globalBlur', 'globalBrightness'],
+        'transparency-and-blur-style',
+        (s) => {
+            const opacity = s.trackModalOpacity?.value / 100 ?? 0.65;
+            const saturate = s.globalSaturate?.value ?? 200;
+            const blur = s.globalBlur?.value ?? 0.9375;
+            const brightness = s.globalBrightness?.value ?? 1;
+            return `
+                .TrackModal_root__QrFg6.ifxS_8bgSnwBoCsyow0E::before {
+                    background-color: rgba(25, 25, 25, ${opacity}) !important;
+                }
+                .ifxS_8bgSnwBoCsyow0E {
+                    backdrop-filter: saturate(${saturate}%) blur(${blur}rem) brightness(${brightness}) !important;
+                }
+            `;
+        }
+    );
 
-    modules.forEach(module => {
-        const settingKey = `OB${module.charAt(0) + module.slice(1)}`;
-        const cssId = `openblocker-${module}`;
-        const existingLink = document.getElementById(cssId);
-        
-        if (Object.keys(settings).length === 0 || settings['Open-Blocker'][settingKey] !== newSettings['Open-Blocker'][settingKey]) {
-            if (newSettings['Open-Blocker'][settingKey]) {
-                if (existingLink) {
-                    existingLink.remove();
+    updateStyleOnSettingChange(
+        ['mainElementsBlur', 'mainElementsBrightness'],
+        'main-elements-style',
+        (s) => {
+            const blur = s.mainElementsBlur?.value ?? 70;
+            const brightness = s.mainElementsBrightness?.value ?? 1.5;
+            return `
+                .Content_main__8_wIa,
+                .PlayerBarDesktopWithBackgroundProgressBar_playerBar__mp0p9,
+                .ReleaseNotesModal_root__RSw1p,
+                .Donation_root__nwHCN {
+                    backdrop-filter: blur(${blur}px) brightness(${brightness}) !important;
                 }
-            } else {
-                if (!existingLink) {
-                    fetch(`https://raw.githubusercontent.com/Open-Blocker-FYM/Open-Blocker/refs/heads/main/blocker-css/${module}.css`)
-                        .then(response => response.text())
-                        .then(css => {
-                            const style = document.createElement("style");
-                            style.id = cssId;
-                            style.textContent = css;
-                            document.head.appendChild(style);
-                        })
-                        .catch(error => console.error(`Ошибка загрузки CSS: ${module}`, error));
+            `;
+        }
+    );
+
+    updateStyleOnSettingChange(
+        ['navbarBlur', 'navbarBrightness'],
+        'navbar-style',
+        (s) => {
+            const blur = s.navbarBlur?.value ?? 70;
+            const brightness = s.navbarBrightness?.value ?? 1.5;
+            return `
+                .NavbarDesktop_root__scYzp {
+                    backdrop-filter: blur(${blur}px) brightness(${brightness}) !important;
                 }
+            `;
+        }
+    );
+
+    // Яркость фона (прямое изменение стиля элемента, без генерации <style>).
+    const bgBrightnessSetting = newSettings.backgroundBrightness;
+    const bgBrightnessChanged = bgBrightnessSetting && (!lastAppliedSettings.backgroundBrightness || lastAppliedSettings.backgroundBrightness.value !== bgBrightnessSetting.value);
+    if (bgBrightnessChanged) {
+        const brightnessValue = bgBrightnessSetting.value;
+        if (bgLayer1) bgLayer1.style.filter = `blur(3px) brightness(${brightnessValue})`;
+        if (bgLayer2) bgLayer2.style.filter = `blur(3px) brightness(${brightnessValue})`;
+        console.log(`[ChromaSync] Яркость фона обновлена: ${brightnessValue}`);
+        lastAppliedSettings.backgroundBrightness = { ...bgBrightnessSetting };
+    }
+
+    updateStyleOnSettingChange(
+        'togglePlayerBorder',
+        'player-border-style',
+        (s) => s.togglePlayerBorder?.value ?
+        `
+                .PlayerBarDesktopWithBackgroundProgressBar_player__ASKKs {
+                    box-shadow: 0 0 20px -3px var(--accent-color, #0000);
+                    border-color: var(--accent-color, #fff1);
+                    transition: border-color 0.7s ease, box-shadow 0.7s ease;
+                }
+            ` :
+        `
+                .PlayerBarDesktopWithBackgroundProgressBar_player__ASKKs {
+                    box-shadow: none;
+                    border-color: transparent;
+                }
+            `
+    );
+
+    // Акцент на кнопке Play
+    updateStyleOnSettingChange(
+        ['togglePlayButtonAccent'],
+        'play-button-accent-style',
+        (s) => {
+            const isEnabled = s.togglePlayButtonAccent?.value ?? false;
+            const color = isEnabled ? 'var(--accent-color)' : 'var(--ym-controls-color-default-enabled)';
+            return `.player-controls__btn_play .icon { color: ${color} !important; }`;
+        }
+    );
+
+    // Lite: пульсация отключена
+
+    // Блокировщик рекламы и лишних модулей
+    const modulesToBlock = ['betabutton', 'donations', 'artistrecommends', 'concerts'];
+    modulesToBlock.forEach(moduleKey => {
+        if (settings[moduleKey]?.value && !lastAppliedSettings[moduleKey]) {
+            console.log(`[OpenBlocker] Скрываю модуль: ${moduleKey}`);
+            let styleElement = document.getElementById(`block-${moduleKey}-style`);
+            if (!styleElement) {
+                styleElement = document.createElement('style');
+                styleElement.id = `block-${moduleKey}-style`;
+                document.head.appendChild(styleElement);
+                styleElement.textContent = `.promo-popup-${moduleKey}, .${moduleKey} { display: none !important; }`;
             }
+        } else if (!settings[moduleKey]?.value && lastAppliedSettings[moduleKey]) {
+            const styleElement = document.getElementById(`block-${moduleKey}-style`);
+            if (styleElement) styleElement.remove();
         }
     });
 
-    // Auto Play
-    if (newSettings['Developer'].devAutoPlayOnStart && !window.hasRun) {
-        document.querySelector(`section.PlayerBar_root__cXUnU * [data-test-id="PLAY_BUTTON"]`)
-        ?.click();
+    // Автовоспроизведение при запуске.
+    const autoPlaySetting = newSettings.devAutoPlayOnStart;
+    if (autoPlaySetting?.value && !window.hasRun) {
+        document.querySelector(`section.PlayerBar_root__cXUnU * [data-test-id="PLAY_BUTTON"]`)?.click();
         window.hasRun = true;
     }
 
-    // Update theme settings delay
-    if (Object.keys(settings).length === 0 || settings['Особое'].setInterval.text !== newSettings['Особое'].setInterval.text) {
-        const newDelay = parseInt(newSettings['Особое'].setInterval.text, 10) || 1000;
+    // Обновление интервала опроса настроек.
+    if (Object.keys(settings).length === 0 || settings.setInterval.text.value !== newSettings.setInterval.text.value) {
+        const newDelay = parseInt(newSettings.setInterval.text.value, 10) || 1000;
         if (settingsDelay !== newDelay) {
             settingsDelay = newDelay;
-
-            // Обновление интервала
             clearInterval(updateInterval);
             updateInterval = setInterval(update, settingsDelay);
         }
     }
-}
 
-async function update() {
-    const newSettings = await getSettings();
-    if (newSettings && Object.keys(newSettings).length > 0) {
-        await setSettings(newSettings);
-        settings = newSettings; // `settings` по-прежнему хранит последнюю версию с сервера для сравнения
+    // Lite: настройки BeatPulse отсутствуют
+
+
+    // Скрытие/сдвиг блоков главной страницы
+    applyMainPageBlocksHidingGuarded(newSettings);
+
+    // Hide Beta button
+    const betaToggle = newSettings.hideBetaButton;
+    const betaStyleId = 'beta-hide-style';
+    const betaCss = `.MainPage_beta_withReleaseNotes__WOjUk, .MainPage_beta__y32vb { opacity: 0 !important; pointer-events: none !important; }`;
+    let betaStyle = document.getElementById(betaStyleId);
+    if (betaToggle && betaToggle.value) {
+        if (!betaStyle) {
+            betaStyle = document.createElement('style');
+            betaStyle.id = betaStyleId;
+            betaStyle.textContent = betaCss;
+            document.head.appendChild(betaStyle);
+        }
+    } else {
+        if (betaStyle) betaStyle.remove();
     }
 }
 
+/**
+ * Циклическая функция, которая опрашивает настройки и применяет их.
+ */
+async function update() {
+    const newSettings = await getSettings("ChromaSync");
+    if (newSettings && Object.keys(newSettings).length > 0) {
+        settings = newSettings; // Сначала обновляем глобальные настройки.
+        await setSettings(newSettings); // Затем вызываем функцию их применения.
+    }
+}
+
+/**
+ * Инициализирует скрипт: запускает первый опрос и устанавливает интервал.
+ */
 function init() {
     update();
     updateInterval = setInterval(update, settingsDelay);
 }
 
-init();
-/*--------------------------------------------*/
-
-
-// --- НАЧАЛО: Синхронизация при восстановлении окна ---
+/**
+ * Обработчик события, когда страница становится видимой.
+ */
 const forceSyncOnVisibility = () => {
-    // Небольшая задержка, чтобы дать интерфейсу Яндекса "прогрузиться" после разворачивания
     setTimeout(() => {
         console.log('[ChromaSync] Окно стало видимым. Запускаю принудительную синхронизацию...');
-        const coverElement = document.querySelector('[class*="PlayerBarDesktopWithBackgroundProgressBar_cover__MKmEt"]');
-        if (coverElement) {
-            // ИЗМЕНЕНО: Просто сбрасываем состояние и вызываем обработчик.
-            // Это гарантирует, что он перечитает всё с нуля.
-            currentImgBackground = ""; 
-            currentTrackTitle = "";
-            handleCoverChange(coverElement);
+        handleCoverChange();
+        if (mainObserver) {
+            mainObserver.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['src']
+            });
+            console.log('[ChromaSync] Наблюдатель DOM снова подключен.');
         }
-    }, 1200); // 1.5-секундная задержка
+    }, 400);
 };
 
-// "Слушаем" событие, когда пользователь возвращается на вкладку
+// Слушатель события 'visibilitychange' для оптимизации.
 document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
+    if (document.hidden) {
+        // Отключаем наблюдатель, когда вкладка неактивна, чтобы экономить ресурсы.
+        if (mainObserver) {
+            mainObserver.disconnect();
+            console.log('[ChromaSync] Наблюдатель DOM отключен из-за неактивности вкладки.');
+        }
+    } else {
         forceSyncOnVisibility();
     }
 });
-// --- КОНЕЦ: Синхронизация при восстановлении окна ---
+
+window.addEventListener('focus', () => {});
+
+
+
+// Lite version: no PRO bundle loader
+function loadBeatPulseIfNeeded(){ /* noop in Lite */ }
+
+// call loader on settings change and on visibility/focus
+document.addEventListener('visibilitychange', () => { /* lite: no pro loader */ });
+window.addEventListener('focus', () => { /* lite: no pro loader */ });
+// Ensure we do not keep PRO active without license (still relevant to clear orphan state)
+setTimeout(()=>{ try{ cleanupUnauthorizedPro(); }catch{} }, 0);
+
+// Запускаем всю логику.
+init();
+
+// Disable Yandex.Metrika script and guard against re-adding
+(function disableMetrika(){
+	try {
+		const remove = () => {
+			const s = document.querySelector('script[src*="mc.yandex.ru/metrika/tag.js"], #metrika-script');
+			if (s && s.parentNode) s.parentNode.removeChild(s);
+			if (window.ym) try { delete window.ym; } catch { window.ym = undefined; }
+		};
+		remove();
+		const mo = new MutationObserver(() => remove());
+		mo.observe(document.documentElement, { childList: true, subtree: true });
+		console.log('[ChromaSync] Metrika disabled');
+	} catch {}
+})();
+
+// Close SOUND_QUALITY menu on second click (toggle behavior)
+(function fixSoundQualityToggle(){
+	const isMenuOpen = () => !!document.querySelector('[data-test-id="QUALITY_SETTINGS_CONTEXT_MENU"]');
+	document.addEventListener('click', (ev) => {
+		const btn = ev.target && ev.target.closest('button[data-test-id="SOUND_QUALITY_BUTTON"]');
+		if (!btn) return;
+		if (isMenuOpen()) {
+			// Already open: intercept and close via Escape
+			ev.preventDefault();
+			ev.stopImmediatePropagation();
+			const esc = new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, which: 27, bubbles: true });
+			document.dispatchEvent(esc);
+			setTimeout(() => {
+				const menu = document.querySelector('[data-test-id="QUALITY_SETTINGS_CONTEXT_MENU"]');
+				if (menu) menu.remove();
+			}, 50);
+		}
+	}, true);
+})();
+
+// Lite version: no BeatPulse startup hooks
+
+// Ensure PSBpanel and fix PSB-text update
+function ensurePSBPanel() {
+	let panel = document.querySelector('div.PSBpanel');
+	if (!panel) {
+		panel = document.createElement('div');
+		panel.className = 'PSBpanel';
+		const p = document.createElement('p');
+		p.className = 'PSB-text';
+		panel.appendChild(p);
+		document.body.appendChild(panel);
+	} else {
+		let p = panel.querySelector('.PSB-text') || panel.querySelector('p');
+		if (p && !p.classList.contains('PSB-text')) p.classList.add('PSB-text');
+		if (!p) {
+			p = document.createElement('p');
+			p.className = 'PSB-text';
+			panel.appendChild(p);
+		}
+	}
+	return panel;
+}
+
+function updatePSBTitleText(text){
+	const desired = String(text ?? '');
+	// Не скрываем оригинал
+	const hide = document.getElementById('psb-hide-origin');
+	if (hide) hide.remove();
+
+	// 1) Обновляем все существующие .PSB-text
+	let updated = false;
+	const list = document.querySelectorAll('.PSB-text');
+	if (list && list.length) {
+		list.forEach(el => {
+			el.textContent = desired;
+			el._psbDesired = desired;
+			if (!el._psbObserver) {
+				el._psbObserver = new MutationObserver(() => {
+					if (el.textContent !== el._psbDesired) el.textContent = el._psbDesired;
+				});
+				el._psbObserver.observe(el, { characterData: true, childList: true, subtree: true });
+			}
+		});
+		updated = true;
+	}
+
+	// 2) Если нет .PSB-text сейчас — создадим панель (fallback)
+	if (!updated) {
+		const panel = ensurePSBPanel();
+		let el = panel.querySelector('.PSB-text');
+		if (!el) {
+			el = document.createElement('p');
+			el.className = 'PSB-text';
+			panel.appendChild(el);
+		}
+		el.textContent = desired;
+		el._psbDesired = desired;
+		if (!el._psbObserver) {
+			el._psbObserver = new MutationObserver(() => {
+				if (el.textContent !== el._psbDesired) el.textContent = el._psbDesired;
+			});
+			el._psbObserver.observe(el, { characterData: true, childList: true, subtree: true });
+		}
+	}
+
+	// 3) Наблюдаем за появлением будущих .PSB-text и обновляем их
+	if (!document._psbGlobalObserver) {
+		document._psbGlobalObserver = new MutationObserver((mutations) => {
+			for (const m of mutations) {
+				m.addedNodes && m.addedNodes.forEach(node => {
+					if (!node || node.nodeType !== 1) return;
+					if (node.matches && node.matches('.PSB-text')) {
+						node.textContent = desired;
+						node._psbDesired = desired;
+						if (!node._psbObserver) {
+							node._psbObserver = new MutationObserver(() => {
+								if (node.textContent !== node._psbDesired) node.textContent = node._psbDesired;
+							});
+							node._psbObserver.observe(node, { characterData: true, childList: true, subtree: true });
+						}
+					}
+					if (node.querySelectorAll) {
+						node.querySelectorAll('.PSB-text').forEach(sub => {
+							sub.textContent = desired;
+							sub._psbDesired = desired;
+							if (!sub._psbObserver) {
+								sub._psbObserver = new MutationObserver(() => {
+									if (sub.textContent !== sub._psbDesired) sub.textContent = sub._psbDesired;
+								});
+								sub._psbObserver.observe(sub, { characterData: true, childList: true, subtree: true });
+							}
+						});
+					}
+				});
+			}
+		});
+		document._psbGlobalObserver.observe(document.body, { childList: true, subtree: true });
+	}
+}
+
+function applyMainPageBlocksHidingGuarded(cfg){
+    /* lite: feature unavailable */
+    return;
+    try{
+		const container = document.querySelector('.MainPage_landing__FGNm') || document.querySelector('[data-test-id="MAIN_PAGE"]');
+		if (!container) return;
+		const nodes = Array.from(container.querySelectorAll('.VirtualizedSkeletonBlock_root__njUFa'));
+		if (!nodes.length) return;
+
+		// Список скрываемых индексов
+		const toHide = new Set();
+		for (let i=0;i<=10;i++){
+			const key = `hideBlock${i}`;
+			const val = typeof cfg?.[key] === 'boolean' ? cfg[key] : !!cfg?.[key]?.value;
+			if (val) toHide.add(String(i));
+		}
+
+		// Сортируем по индексу
+		const items = nodes.slice().sort((a,b)=> (Number(a.getAttribute('data-index')||0)-Number(b.getAttribute('data-index')||0)) );
+
+		// Снимаем примерные высоты
+		const heights = items.map((el, i)=>{
+			let h = el.getBoundingClientRect().height;
+			if (!h || !isFinite(h) || h <= 0) {
+				// Пытаемся угадать из разницы transform у следующего
+				const m1 = /translate3d\(0px,\s*([\d.]+)px,\s*0px\)/.exec(el.style.transform||'');
+				const y1 = m1 ? parseFloat(m1[1]) : null;
+				const n = items[i+1];
+				if (n){
+					const m2 = /translate3d\(0px,\s*([\d.]+)px,\s*0px\)/.exec(n.style.transform||'');
+					const y2 = m2 ? parseFloat(m2[1]) : null;
+					if (y1!=null && y2!=null && y2>y1) h = y2 - y1;
+				}
+			}
+			if (!h || !isFinite(h) || h <= 0) h = 130;
+			return h;
+		});
+
+		// Репакуем: скрытые display:none, видимые — сплошной стек с накапливаемой Y
+		let y = 0;
+		items.forEach((el, i)=>{
+			const idx = el.getAttribute('data-index');
+			if (toHide.has(idx)) {
+				el.style.display = 'none';
+				return;
+			}
+			el.style.display = '';
+			// Записываем transform с приоритетом !important, чтобы перебить внутренние апдейты
+			try { el.style.setProperty('transform', `translate3d(0px, ${y}px, 0px)`, 'important'); } catch { el.style.transform = `translate3d(0px, ${y}px, 0px)`; }
+			y += heights[i];
+		});
+
+		// Сохраняем конфиг и следим за перерисовками, чтобы заново применить сжатие
+		window.__chromaLastBlocksConfig = cfg;
+		if (!window.__chromaBlockMO){
+			const debounced = (()=>{ let t; return ()=>{ clearTimeout(t); t=setTimeout(()=>{ try{ applyMainPageBlocksHidingGuarded(window.__chromaLastBlocksConfig); }catch{} }, 30); };})();
+			window.__chromaBlockMO = new MutationObserver(debounced);
+			window.__chromaBlockMO.observe(container, { childList:true, subtree:true, attributes:true, attributeFilter:['style'] });
+		}
+	} catch(e){ console.warn('[ChromaSync] applyMainPageBlocksHiding error:', e.message); }
+}
+
+// Prewarm Vibrant as early as possible
+loadVibrantScript().catch(()=>{});
+
+/* lite: no licensing */
