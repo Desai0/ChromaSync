@@ -1,4 +1,4 @@
-# Поддержите разработку темы: @ChromaSyncBOT
+# Поддержите разработку темы: [ChromaSyncBOT](https://t.me/ChromaSyncBOT)
 # **ChromaSync Lite**
 
 ### Адаптивная тема для Яндекс Музыки, оживляющая интерфейс прозрачностью и цветами обложки каждого трека!
@@ -95,3 +95,4 @@
 **Desai0**: https://t.me/desaichk <br>
 **Boosty:** https://boosty.to/diramix <br>
 **Discord Server:** https://discord.gg/ky6bcdy7KA
+
