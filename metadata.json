@@ -4,12 +4,13 @@
     "banner": "123.gif",
     "author": [
         "Desaichk",
-        "ImperiaDicks",
+        "forea.adoxid",
+        "imperiadicks",
         "diram1x"
     ],
     "type": "theme",
     "description": "Адаптивная тема оживляющая интерфейс прозрачностью и цветами обложки каждого трека",
-    "version": "2.0.0",
+    "version": "2.2.0",
     "css": "style.css",
     "script": "script.js",
     "tags": [

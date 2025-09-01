@@ -520,9 +520,7 @@ button[data-test-id="MY_VIBE_PAUSE_BUTTON"] {
 	transition: filter 0.3s ease-in-out, color 0.7s ease, transform 0.7s ease-in-out;
 }
 
-.PlayButton_icon__t_THQ {
-	color: var(--accent-color, #8a63b3) !important;
-}
+
 
 .SearchPage_content__Ax9D6 {
 	background-color: rgba(25, 25, 25, 0) !important;
@@ -578,5 +576,3 @@ button[data-test-id="MY_VIBE_PAUSE_BUTTON"] {
     animation: pulse 1.2s infinite ease-in-out;
     transition: transform 0.15s ease-out;
 }
-
-.VibeAnimation_enter_activej0jOl, .VibeAnimation_enter_doneOi2Kz, .VibeAnimation_exit__ioGXk {opacity: 0}

@@ -158,12 +158,30 @@
                     "type": "selector",
                     "selected": 0,
                     "options": [
-                        { "name": "Vibrant (Яркий, основной)", "id": "Vibrant" },
-                        { "name": "LightVibrant (Светлый и живой)", "id": "LightVibrant" },
-                        { "name": "DarkVibrant (Темный и глубокий)", "id": "DarkVibrant" },
-                        { "name": "Muted (Спокойный, приглушенный)", "id": "Muted" },
-                        { "name": "LightMuted (Светлый, пастельный)", "id": "LightMuted" },
-                        { "name": "DarkMuted (Темный, приглушенный)", "id": "DarkMuted" }
+                        {
+                            "name": "Vibrant (Яркий, основной)",
+                            "id": "Vibrant"
+                        },
+                        {
+                            "name": "LightVibrant (Светлый и живой)",
+                            "id": "LightVibrant"
+                        },
+                        {
+                            "name": "DarkVibrant (Темный и глубокий)",
+                            "id": "DarkVibrant"
+                        },
+                        {
+                            "name": "Muted (Спокойный, приглушенный)",
+                            "id": "Muted"
+                        },
+                        {
+                            "name": "LightMuted (Светлый, пастельный)",
+                            "id": "LightMuted"
+                        },
+                        {
+                            "name": "DarkMuted (Темный, приглушенный)",
+                            "id": "DarkMuted"
+                        }
                     ],
                     "defaultParameter": "Vibrant"
                 },
@@ -185,7 +203,7 @@
                     "input": "#00ffcc"
                 },
                 {
-                    "id": "togglePlayButtonAccent",
+                    "id": "togglePlayButtonAccentColor",
                     "name": "Акцентная кнопка Play",
                     "description": "Включает или выключает использование акцентного цвета для кнопки Play.",
                     "type": "button",
@@ -224,6 +242,14 @@
                     "type": "button",
                     "bool": true,
                     "defaultParameter": true
+                },
+                {
+                    "id": "hideVibeAnimation",
+                    "name": "Скрыть анимацию 'Моя волна'",
+                    "description": "Прячет анимацию появления/исчезновения блока 'Моя волна'.",
+                    "type": "button",
+                    "bool": false,
+                    "defaultParameter": false
                 }
             ]
         },
@@ -236,7 +262,11 @@
                     "description": "Выставляет скорость обновления настроек темы. (Задержка нажатия на кнопку в PulseSync и срабатывание в Яндекс Музыке)",
                     "type": "text",
                     "buttons": [
-                        { "name": "text", "text": "1000", "defaultParameter": "1000" }
+                        {
+                            "name": "text",
+                            "text": "1000",
+                            "defaultParameter": "1000"
+                        }
                     ]
                 }
             ]
