@@ -270,6 +270,19 @@
                     ]
                 }
             ]
+        },
+        {
+            "title": "Zen Mode",
+            "items": [
+                {
+                    "id": "showZenModeButton",
+                    "name": "Показывать кнопку Zen Mode",
+                    "description": "Добавляет кнопку для быстрого включения/отключения режима Zen Mode.",
+                    "type": "button",
+                    "defaultParameter": true,
+                    "bool": true
+                }
+            ]
         }
     ]
 }

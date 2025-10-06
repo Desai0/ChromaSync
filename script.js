@@ -212,6 +212,7 @@ const handleParallax = event => {
  */
 const createLayer = zIndex => {
     const layer = document.createElement('div')
+    layer.classList.add('body-background')
     layer.style.position = 'fixed'
     layer.style.top = '-20px'
     layer.style.left = '-20px'
@@ -230,6 +231,97 @@ const createLayer = zIndex => {
 }
 
 /* --- Блок 4: Эффект пульсации — удалён в Lite версии --- */
+
+/**
+ * Отправляет обновление настройки на сервер PulseSync.
+ * ПРЕДПОЛОЖЕНИЕ: Формат тела запроса - { "id": "settingId", "value": "newValue" }.
+ * Этот формат может потребовать корректировки.
+ * @param {string} settingId - ID настройки из handleEvents.json.
+ * @param {*} value - Новое значение настройки.
+ */
+const updateSettingOnServer = async (settingId, value) => {
+    console.log(`[ChromaSync] Попытка обновить настройку '${settingId}' на сервере...`);
+    try {
+        const response = await fetch('http://localhost:2007/update_handle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: settingId, value: value })
+        });
+
+        if (response.ok) {
+            console.log(`[ChromaSync] Настройка '${settingId}' успешно обновлена на сервере.`);
+            // Немедленно запрашиваем свежие настройки для синхронизации.
+            getSettings();
+        } else {
+            console.error(`[ChromaSync] Ошибка обновления настройки на сервере. Статус: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('[ChromaSync] Сетевая ошибка при обновлении настройки:', error);
+    }
+};
+
+function createZenModeButton() {
+    const anchorContainer = document.querySelector('div[class*="CommonLayout_root__WC_W1"]');
+
+    if (!anchorContainer) {
+        // Если контейнера нет на текущей "странице", просто выходим.
+        // Наблюдатель вызовет функцию снова при следующей навигации.
+        return;
+    }
+
+    // Проверяем, не создана ли кнопка ранее, чтобы избежать дубликатов.
+    if (document.getElementById('zenModeButton')) {
+        return;
+    }
+
+    // Все остальное - ваш код, один в один.
+    anchorContainer.style.position = 'relative';
+
+    const zenButton = document.createElement('button');
+    zenButton.id = 'zenModeButton';
+    zenButton.className = 'zen-mode-button';
+    zenButton.innerHTML = 'Z';
+    zenButton.setAttribute('data-tooltip', 'Zen Mode');
+    zenButton.onclick = () => {
+        document.body.classList.toggle('zen-mode-active');
+    };
+
+    zenButton.style.position = 'absolute';
+    zenButton.style.bottom = '3px';
+    zenButton.style.left = '25px';
+    zenButton.style.zIndex = '999999999';
+    zenButton.style.width = '20px';
+    zenButton.style.height = '20px';
+    
+    anchorContainer.appendChild(zenButton);
+}
+
+// --- НОВЫЙ КОД ДЛЯ РЕШЕНИЯ ПРОБЛЕМЫ ---
+
+// 1. Создаем "наблюдателя", который будет следить за изменениями на странице.
+let executionTimeout; // Переменная для хранения таймера
+
+const observer = new MutationObserver(() => {
+    // Отменяем предыдущий запланированный вызов, если он есть
+    clearTimeout(executionTimeout);
+
+    // Планируем новый вызов через 250 мс
+    executionTimeout = setTimeout(() => {
+        // Эта функция выполнится только один раз,
+        // после того как "шторм" изменений в DOM утихнет.
+        console.log('Проверяем наличие кнопки...'); // Для отладки
+        createZenModeButton();
+    }, 200); // Задержка в миллисекундах
+});
+
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+// Вызываем функцию сразу после определения
+createZenModeButton();
+
 
 /**
  * Инициализирует два слоя для фона, если они еще не созданы.
@@ -663,6 +755,12 @@ async function setSettings(newSettings) {
     const titleValue = (titleGroup && (titleGroup.text?.value ?? titleGroup.text ?? titleGroup.value)) || 'ChromaSync'
     updatePSBTitleText(titleValue)
 
+    // Управляем видимостью кнопки Zen Mode
+    const zenButton = document.getElementById('zenModeButton');
+    if (zenButton) {
+        zenButton.style.display = newSettings.showZenModeButton?.value ? 'block' : 'none';
+    }
+
     // Получение цвета плеера для других элементов (например, логотипа).
     const playerBarElement = document.querySelector('section.PlayerBar_root__cXUnU')
     let globalPlayerColor = ''
@@ -964,6 +1062,26 @@ setTimeout(() => {
 // Запускаем всю логику.
 init()
 
+// Disable Yandex.Metrika script and guard against re-adding
+;(function disableMetrika() {
+    try {
+        const remove = () => {
+            const s = document.querySelector('script[src*="mc.yandex.ru/metrika/tag.js"], #metrika-script')
+            if (s && s.parentNode) s.parentNode.removeChild(s)
+            if (window.ym)
+                try {
+                    delete window.ym
+                } catch {
+                    window.ym = undefined
+                }
+        }
+        remove()
+        const mo = new MutationObserver(() => remove())
+        mo.observe(document.documentElement, { childList: true, subtree: true })
+        console.log('[ChromaSync] Metrika disabled')
+    } catch {}
+})()
+
 // Close SOUND_QUALITY menu on second click (toggle behavior)
 ;(function fixSoundQualityToggle() {
     const isMenuOpen = () => !!document.querySelector('[data-test-id="QUALITY_SETTINGS_CONTEXT_MENU"]')
@@ -990,7 +1108,6 @@ init()
 
 // Lite version: no BeatPulse startup hooks
 
-// Ensure PSBpanel and fix PSB-text update
 function ensurePSBPanel() {
     let panel = document.querySelector('div.PSBpanel')
     if (!panel) {
@@ -1009,6 +1126,7 @@ function ensurePSBPanel() {
             panel.appendChild(p)
         }
     }
+    // Убираем вызов отсюда
     return panel
 }
 

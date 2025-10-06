@@ -576,3 +576,101 @@ button[data-test-id="MY_VIBE_PAUSE_BUTTON"] {
     animation: pulse 1.2s infinite ease-in-out;
     transition: transform 0.15s ease-out;
 }
+
+/* Zen Mode Button Style */
+.zen-mode-button {
+    position: absolute;
+    left: 52px;
+	align-items: center;
+    transform: translate(-50%, -50%);
+    z-index: 99999;
+    width: 39px;
+    height: 39px;
+    background-color: rgba(25, 25, 25, 0.226); /* Semi-transparent */
+    color: var(--accent-color, #8a63b3) !important; /* Gray 'Z' */
+    border: 1px solid #ffffff9c;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    transition: background-color 0.3s ease;
+}
+
+.zen-mode-button:hover {
+    background-color: rgba(45, 45, 45, 0.7); /* Darken on hover */
+}
+
+body.zen-mode-active .zen-mode-button {
+    background-color: var(--accent-color, #8a63b3) !important; /* Different semi-transparent color */
+}
+
+
+body.zen-mode-active .Head_head__CxK1s,
+body.zen-mode-active .Head_head__CxK1s *,
+body.zen-mode-active .d-header,
+body.zen-mode-active .d-header *,
+body.zen-mode-active [class*="Head_head"],
+body.zen-mode-active [class*="Head_head"] * {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: flex !important;
+}
+
+/* --- XII. Zen Mode --- */
+
+/* When Zen Mode is active, hide the main UI components */
+body.zen-mode-active .Content_main__8_wIa,
+body.zen-mode-active .NavbarDesktop_root__scYzp,
+body.zen-mode-active .PlayerBarDesktopWithBackgroundProgressBar_playerBar__mp0p9 {
+    display: none !important;
+}
+
+/* Ensure the header remains visible for window dragging */
+body.zen-mode-active .Head_head__CxK1s,
+body.zen-mode-active .d-header,
+button[data-test-id="FULLSCREEN_PLAYER_BUTTON"] {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: flex !important;
+    position: relative;
+    z-index: 100000; /* Bring to front */
+}
+
+/* Ensure the fullscreen button remains visible in Zen Mode */
+body.zen-mode-active [data-test-id="FULLSCREEN_PLAYER_BUTTON"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100000;
+}
+
+/* body.zen-mode-active .zen-mode-button {
+    position: flex;
+    top: 5%;
+    left: 46px;
+	width: 20px;
+	height: 20px;
+    transform: translate(-50%, -50%);
+    z-index: 999999;
+    background-color: rgba(25, 25, 25, 0.226);
+    color: rgb(44, 44, 44);
+    border: 1px solid #444;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    transition: background-color 0.3s ease;
+} */
