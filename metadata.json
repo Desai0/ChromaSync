@@ -1,0 +1,25 @@
+{
+    "name": "ChromaSync Lite",
+    "image": "1.png",
+    "banner": "123.gif",
+    "author": [
+        "Desaichk",
+        "forea.adoxid",
+        "imperiadicks",
+        "diram1x"
+    ],
+    "type": "theme",
+    "description": "Адаптивная тема оживляющая интерфейс прозрачностью и цветами обложки каждого трека",
+    "version": "2.2.0",
+    "css": "style.css",
+    "script": "script.js",
+    "tags": [
+        "Colored",
+        "Themed",
+        "Blur"
+    ],
+    "fromPext": true,
+    "allowedUrls": [
+        "https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"
+    ]
+}
