@@ -86,6 +86,13 @@
 *   **MutationObserver:** Нативный API браузера для отслеживания изменений на странице.
 *   **CSS-переменные:** Вся магия с цветами и стилями реализована через динамическое изменение CSS-переменных, что обеспечивает высокую производительность.
 
+# Установка
+* Скачайте PulseSync: https://pulsesync.dev/
+* Авторизуйтесь через Discord, установите все компоненты
+* Скачайте .pext из [последнего релиза](https://github.com/Desai0/ChromaSync/releases)
+* Поддержите разработку, получив полный функционал: [ChromaSyncBOT](https://t.me/ChromaSyncBOT)
+* **Пользуйтесь!**
+
 Вдохновлена Blurity by diram1x https://github.com/Diramix/blurity/releases
 Использует наработки imperiadicks
 
