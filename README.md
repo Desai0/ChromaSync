@@ -230,5 +230,4 @@
 **PulseSync**: https://pulsesync.dev/ <br>
 **Desai0**: https://t.me/desaichk <br>
 
-_Вдохновлена Blurity by diram1x https://github.com/Diramix/blurity/releases_ <br>
-_Использует наработки imperiadicks_
+_Вдохновлена Blurity by diram1x https://github.com/Diramix/blurity/releases_ 
