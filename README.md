@@ -1,4 +1,4 @@
-# Поддержите разработку темы: [ChromaSyncBOT](https://t.me/ChromaSyncBOT)
+# Поддержите разработку темы и получите доступ к ULTIMATE функционалу: [ChromaSyncBOT](https://t.me/ChromaSyncBOT)
 # **ChromaSync Lite**
 <img width="1920" height="802" alt="Screenshot 2025-10-09 034238" src="https://github.com/user-attachments/assets/9158e336-f737-4b4d-9e4b-727e6a24be8d" /> <br>
 
