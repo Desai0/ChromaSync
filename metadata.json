@@ -10,7 +10,7 @@
     ],
     "type": "theme",
     "description": "Адаптивная тема оживляющая интерфейс прозрачностью и цветами обложки каждого трека",
-    "version": "2.5.1",
+    "version": "2.5.2",
     "css": "style.css",
     "script": "script.js",
     "tags": [
