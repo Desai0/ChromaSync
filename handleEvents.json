@@ -21,7 +21,7 @@
                     "name": "Обводка плеера",
                     "description": "Включает или выключает цветную обводку и тень у плеера.",
                     "type": "button",
-                    "bool": true,
+                    "bool": false,
                     "defaultParameter": true
                 },
                 {
@@ -30,6 +30,14 @@
                     "description": "Делай цвет лого под цвет акцента трека.",
                     "type": "button",
                     "bool": true,
+                    "defaultParameter": true
+                },
+                {
+                    "id": "toggleMainBorders",
+                    "name": "Обводка основных блоков",
+                    "description": "Включает или выключает цветную обводку и тень у навигации, плеера и основного контента.",
+                    "type": "button",
+                    "bool": false,
                     "defaultParameter": true
                 }
             ]
@@ -248,8 +256,8 @@
                     "name": "Скрыть анимацию 'Моя волна'",
                     "description": "Прячет анимацию появления/исчезновения блока 'Моя волна'.",
                     "type": "button",
-                    "bool": false,
-                    "defaultParameter": false
+                    "bool": true,
+                    "defaultParameter": true
                 }
             ]
         },

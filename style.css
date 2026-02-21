@@ -674,3 +674,120 @@ body.zen-mode-active [data-test-id="FULLSCREEN_PLAYER_BUTTON"] {
     padding: 0;
     transition: background-color 0.3s ease;
 } */
+
+/* Our Custom Button Style */
+.our-custom-button {
+    background-color: rgba(25, 25, 25, 0.226);
+    color: var(--accent-color, #8a63b3);
+    border: 1px solid #ffffff10;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.our-custom-button:hover {
+    background-color: rgba(49, 49, 49, 0.7);
+    transform: scale(1.1);
+}
+
+/* --- Ultimate Feature Modal --- */
+#ultimate-modal-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9); /* Start scaled down */
+    width: 420px;
+    max-width: 90vw;
+    z-index: 1000;
+    background-color: rgba(25, 25, 25, 0.5);
+    backdrop-filter: blur(25px) brightness(1.2);
+    border-radius: 12px;
+    border: 1px solid var(--accent-color, #fff1);
+    box-shadow: 0 0 30px -5px var(--accent-color, #0000);
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+#ultimate-modal-panel.visible {
+    opacity: 1;
+    pointer-events: all;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.ultimate-modal-header {
+    padding: 15px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    text-align: center;
+    color: var(--accent-color, #fff);
+}
+
+.ultimate-modal-content {
+    padding: 25px;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.ultimate-modal-content p {
+    margin: 0;
+}
+
+.ultimate-modal-button {
+    display: inline-block;
+    background-color: var(--accent-color, #8a63b3);
+    color: var(--dark-vibrant-color, #000);
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.ultimate-modal-button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+.ultimate-modal-close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 28px;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.ultimate-modal-close-btn:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+.BaseSonataControlsDesktop_playButtonIcon__TlFqv {
+    color: #e6e6e6;
+}
+
+.By12CU9obvaH0jYtauNw {
+    scrollbar-width: none
+}

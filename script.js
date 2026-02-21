@@ -280,7 +280,7 @@ function createZenModeButton() {
     const zenButton = document.createElement('button');
     zenButton.id = 'zenModeButton';
     zenButton.className = 'zen-mode-button';
-    zenButton.innerHTML = 'Z';
+    zenButton.innerHTML = '☯';
     zenButton.setAttribute('data-tooltip', 'Zen Mode');
     zenButton.onclick = () => {
         document.body.classList.toggle('zen-mode-active');
@@ -321,7 +321,116 @@ observer.observe(document.body, {
 
 // Вызываем функцию сразу после определения
 createZenModeButton();
+createOurCustomButton();
 
+function createOurCustomButton() {
+    // 1. Находим целевую кнопку (Текстомузыка)
+    const lyricsButton = document.querySelector('[data-test-id="PLAYERBAR_DESKTOP_SYNC_LYRICS_BUTTON"]');
+
+    if (!lyricsButton) {
+        // Если кнопка не найдена, выходим. Наблюдатель попробует снова.
+        return;
+    }
+
+    if (document.getElementById('ourCustomButton')) {
+        // Если наша кнопка уже существует, выходим.
+        return;
+    }
+
+    // 2. Создаем div-обертку
+    const wrapper = document.createElement('div');
+    wrapper.style.position = 'relative';
+    wrapper.style.display = 'inline-flex'; // Позволяет обертке вести себя как элемент в строке
+    wrapper.style.alignItems = 'center';
+    wrapper.style.justifyContent = 'center';
+
+    // 3. Заменяем оригинальную кнопку на нашу обертку, перемещая кнопку внутрь
+    lyricsButton.parentNode.insertBefore(wrapper, lyricsButton);
+    wrapper.appendChild(lyricsButton);
+
+    // 4. Создаем нашу кастомную кнопку
+    const customButton = document.createElement('button');
+    customButton.id = 'ourCustomButton';
+    customButton.className = 'our-custom-button';
+    customButton.innerHTML = '💬︎';
+    customButton.setAttribute('data-tooltip', 'Комментарии');
+    customButton.onclick = (e) => {
+        e.stopPropagation(); // Предотвращаем клик по родительской кнопке
+        showUltimateModal();
+    };
+
+    // 5. Позиционируем кнопку как бейдж в правом верхнем углу
+    customButton.style.position = 'absolute';
+    customButton.style.top = '2px';
+    customButton.style.right = '40px';
+    customButton.style.zIndex = '10';
+    customButton.style.width = '28px';
+    customButton.style.height = '28px';
+    customButton.style.fontSize = '16px';
+    
+    wrapper.appendChild(customButton);
+}
+
+
+/**
+ * =========================================================================
+ *                          БЛОК ULTIMATE УВЕДОМЛЕНИЯ
+ * =========================================================================
+ */
+
+/**
+ * Инициализирует и создает модальное окно (один раз).
+ */
+function initUltimateModal() {
+    if (document.getElementById('ultimate-modal-panel')) return;
+
+    const panel = document.createElement('div');
+    panel.id = 'ultimate-modal-panel';
+
+    panel.innerHTML = `
+        <div class="ultimate-modal-header">
+            ⭐ Эксклюзив ChromaSync Ultimate
+        </div>
+        <div class="ultimate-modal-content">
+            <p>Обсуждение треков, аудио-реактивная пульсация и другие уникальные возможности доступны только в <b>Ultimate-версии</b>!</p>
+            <p>Пожалуйста, поддержите проект и получите благодарность от меня</p>
+            <a href="https://t.me/ChromaSyncBOT" target="_blank" class="ultimate-modal-button">Поддержать в @ChromaSyncBOT</a>
+        </div>
+        <button class="ultimate-modal-close-btn">&times;</button>
+    `;
+
+    document.body.appendChild(panel);
+
+    // Закрытие по клику на кнопку
+    panel.querySelector('.ultimate-modal-close-btn').addEventListener('click', hideUltimateModal);
+    
+    // Закрытие по клику вне окна (на оверлей)
+    panel.addEventListener('click', (e) => {
+        if (e.target === panel) {
+            hideUltimateModal();
+        }
+    });
+}
+
+/**
+ * Показывает модальное окно.
+ */
+function showUltimateModal() {
+    const panel = document.getElementById('ultimate-modal-panel');
+    if (!panel) return;
+    panel.classList.add('visible');
+}
+
+/**
+ * Скрывает модальное окно.
+ */
+function hideUltimateModal() {
+    const panel = document.getElementById('ultimate-modal-panel');
+    if (!panel) return;
+    panel.classList.remove('visible');
+}
+
+// =========================================================================
 
 /**
  * Инициализирует два слоя для фона, если они еще не созданы.
@@ -753,7 +862,8 @@ async function setSettings(newSettings) {
     // Обновление заголовка темы
     const titleGroup = newSettings.themeTitleText || newSettings.themeTitle
     const titleValue = (titleGroup && (titleGroup.text?.value ?? titleGroup.text ?? titleGroup.value)) || 'ChromaSync'
-    updatePSBTitleText(titleValue)
+
+    syncHeaderOverlayText(titleValue)
 
     // Управляем видимостью кнопки Zen Mode
     const zenButton = document.getElementById('zenModeButton');
@@ -895,6 +1005,20 @@ async function setSettings(newSettings) {
                 }
             `,
     )
+
+    updateStyleOnSettingChange('toggleMainBorders', 'main-borders-style', s => {
+        if (s.toggleMainBorders?.value === false) {
+            return `
+                .NavbarDesktop_root__scYzp,
+                .PlayerBar_root__cXUnU,
+                .Content_main__8_wIa {
+                    border-color: transparent !important;
+                    box-shadow: none !important;
+                }
+            `
+        }
+        return ''
+    })
 
     updateStyleOnSettingChange('hideVibeAnimation', 'vibe-animation-style', s => {
         return s.hideVibeAnimation && s.hideVibeAnimation.value
@@ -1061,6 +1185,7 @@ setTimeout(() => {
 
 // Запускаем всю логику.
 init()
+initUltimateModal()
 
 // Disable Yandex.Metrika script and guard against re-adding
 ;(function disableMetrika() {
@@ -1149,73 +1274,118 @@ function applyTitlebarCss(selector) {
     styleEl.textContent = `${selector} { position: fixed; color: #fff; left: 50%; transform: translate(-50%, -2px); z-index: 9999; font-weight: 500; padding: 3px; border-radius: 5px; visibility: visible; }`
 }
 
-function updatePSBTitleText(text) {
-    const desired = String(text ?? '')
-    const hide = document.getElementById('psb-hide-origin')
-    if (hide) hide.remove()
+function syncHeaderOverlayText(text) {
+    const desired = String(text ?? '').trim() || 'ChromaSync'
+    let panel = document.querySelector('div.PSBpanel')
 
-    const selector = getTitlebarSelector()
-    if (!selector) return
-
-    applyTitlebarCss(selector)
-
-    const className = selector.startsWith('.') ? selector.slice(1) : selector
-    const nodes = Array.from(document.getElementsByClassName(className))
-    nodes.forEach(el => {
-        el.textContent = desired
-        el._psbDesired = desired
-        if (!el._psbObserver) {
-            const mo = new MutationObserver(() => {
-                if (el.textContent !== el._psbDesired) el.textContent = el._psbDesired
-            })
-            mo.observe(el, { characterData: true, childList: true, subtree: true })
-            el._psbObserver = mo
-        }
-    })
-
-    if (document._psbGlobalObserver && typeof document._psbGlobalObserver.disconnect === 'function') {
-        try {
-            document._psbGlobalObserver.disconnect()
-        } catch {}
+    // если есть нативный PulseSync title, отключаем кастомизацию надписи
+    if (document.querySelector('span[class*="TitleBar_pulseText"]')) {
+        if (panel) panel.style.display = 'none'
+        const hideStyle = document.getElementById('psb-hide-origin')
+        if (hideStyle) hideStyle.remove()
+        return
     }
 
-    document._psbGlobalObserver = new MutationObserver(mutations => {
-        for (const m of mutations) {
-            if (m.addedNodes) {
-                m.addedNodes.forEach(node => {
-                    if (!node || node.nodeType !== 1) return
+    panel = panel || ensurePSBPanel()
+    if (!panel) return
 
-                    if (node.matches && node.matches(selector)) {
-                        node.textContent = desired
-                        node._psbDesired = desired
-                        if (!node._psbObserver) {
-                            const mo = new MutationObserver(() => {
-                                if (node.textContent !== node._psbDesired) node.textContent = node._psbDesired
-                            })
-                            mo.observe(node, { characterData: true, childList: true, subtree: true })
-                            node._psbObserver = mo
-                        }
-                    }
+    panel.style.display = ''
+    panel.style.pointerEvents = 'none'
 
-                    if (node.querySelectorAll) {
-                        node.querySelectorAll(selector).forEach(sub => {
-                            sub.textContent = desired
-                            sub._psbDesired = desired
-                            if (!sub._psbObserver) {
-                                const mo = new MutationObserver(() => {
-                                    if (sub.textContent !== sub._psbDesired) sub.textContent = sub._psbDesired
-                                })
-                                mo.observe(sub, { characterData: true, childList: true, subtree: true })
-                                sub._psbObserver = mo
-                            }
-                        })
-                    }
-                })
-            }
-        }
-    })
-    document._psbGlobalObserver.observe(document.body, { childList: true, subtree: true })
+    let p = panel.querySelector('.PSB-text') || panel.querySelector('p')
+    if (!p) {
+        p = document.createElement('p')
+        p.className = 'PSB-text'
+        panel.appendChild(p)
+    }
+
+    p.style.top = '4px'
+    p.style.margin = '0'
+    if (p.textContent !== desired) p.textContent = desired
+
+    const selector = getTitlebarSelector()
+    let hideStyle = document.getElementById('psb-hide-origin')
+    
+    if (!selector) {
+        if (hideStyle) hideStyle.remove()
+        return
+    }
+    
+    if (!hideStyle) {
+        hideStyle = document.createElement('style')
+        hideStyle.id = 'psb-hide-origin'
+        document.head.appendChild(hideStyle)
+    }
+    hideStyle.textContent = `${selector} { visibility: hidden !important; }`
 }
+
+// function updatePSBTitleText(text) {
+//     const desired = String(text ?? '')
+//     const hide = document.getElementById('psb-hide-origin')
+//     if (hide) hide.remove()
+
+//     const selector = getTitlebarSelector()
+//     if (!selector) return
+
+//     applyTitlebarCss(selector)
+
+//     const className = selector.startsWith('.') ? selector.slice(1) : selector
+//     const nodes = Array.from(document.getElementsByClassName(className))
+//     nodes.forEach(el => {
+//         el.textContent = desired
+//         el._psbDesired = desired
+//         if (!el._psbObserver) {
+//             const mo = new MutationObserver(() => {
+//                 if (el.textContent !== el._psbDesired) el.textContent = el._psbDesired
+//             })
+//             mo.observe(el, { characterData: true, childList: true, subtree: true })
+//             el._psbObserver = mo
+//         }
+//     })
+
+//     if (document._psbGlobalObserver && typeof document._psbGlobalObserver.disconnect === 'function') {
+//         try {
+//             document._psbGlobalObserver.disconnect()
+//         } catch {}
+//     }
+
+//     document._psbGlobalObserver = new MutationObserver(mutations => {
+//         for (const m of mutations) {
+//             if (m.addedNodes) {
+//                 m.addedNodes.forEach(node => {
+//                     if (!node || node.nodeType !== 1) return
+
+//                     if (node.matches && node.matches(selector)) {
+//                         node.textContent = desired
+//                         node._psbDesired = desired
+//                         if (!node._psbObserver) {
+//                             const mo = new MutationObserver(() => {
+//                                 if (node.textContent !== node._psbDesired) node.textContent = node._psbDesired
+//                             })
+//                             mo.observe(node, { characterData: true, childList: true, subtree: true })
+//                             node._psbObserver = mo
+//                         }
+//                     }
+
+//                     if (node.querySelectorAll) {
+//                         node.querySelectorAll(selector).forEach(sub => {
+//                             sub.textContent = desired
+//                             sub._psbDesired = desired
+//                             if (!sub._psbObserver) {
+//                                 const mo = new MutationObserver(() => {
+//                                     if (sub.textContent !== sub._psbDesired) sub.textContent = sub._psbDesired
+//                                 })
+//                                 mo.observe(sub, { characterData: true, childList: true, subtree: true })
+//                                 sub._psbObserver = mo
+//                             }
+//                         })
+//                     }
+//                 })
+//             }
+//         }
+//     })
+//     document._psbGlobalObserver.observe(document.body, { childList: true, subtree: true })
+// }
 
 // Prewarm Vibrant as early as possible
 loadVibrantScript().catch(() => {})
