@@ -1185,27 +1185,8 @@ setTimeout(() => {
 
 // Запускаем всю логику.
 init()
-initUltimateModal()
 
 // Disable Yandex.Metrika script and guard against re-adding
-;(function disableMetrika() {
-    try {
-        const remove = () => {
-            const s = document.querySelector('script[src*="mc.yandex.ru/metrika/tag.js"], #metrika-script')
-            if (s && s.parentNode) s.parentNode.removeChild(s)
-            if (window.ym)
-                try {
-                    delete window.ym
-                } catch {
-                    window.ym = undefined
-                }
-        }
-        remove()
-        const mo = new MutationObserver(() => remove())
-        mo.observe(document.documentElement, { childList: true, subtree: true })
-        console.log('[ChromaSync] Metrika disabled')
-    } catch {}
-})()
 
 // Close SOUND_QUALITY menu on second click (toggle behavior)
 ;(function fixSoundQualityToggle() {
