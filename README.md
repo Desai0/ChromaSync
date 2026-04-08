@@ -1,4 +1,4 @@
-# Поддержите разработку темы: @ChromaSyncBOT
+# ☁️ Подключитесь к инфраструктуре ChromaSync Ultimate и получите свой Personal API Token, для расширенного функционала: [@ChromaSyncBOT](https://t.me/ChromaSyncBOT)
 # **ChromaSync Lite**
 
 ### Адаптивная тема для Яндекс Музыки, оживляющая интерфейс прозрачностью и цветами обложки каждого трека!
