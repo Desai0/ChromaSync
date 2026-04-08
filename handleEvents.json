@@ -4,36 +4,41 @@
             "title": "Элементы интерфейса",
             "items": [
                 {
-                    "id": "themeTitleText_1",
-                    "name": "text",
+                    "id": "themeTitleText",
+                    "name": "Theme Title Text",
                     "description": "Надпись сверху.",
                     "type": "text",
-                    "value": "ChromaSync Lite",
-                    "defaultValue": "ChromaSync Lite"
+                    "buttons": [
+                        {
+                            "name": "text",
+                            "text": "ChromaSync Lite",
+                            "defaultParameter": "ChromaSync Lite"
+                        }
+                    ]
                 },
                 {
                     "id": "togglePlayerBorder",
                     "name": "Обводка плеера",
                     "description": "Включает или выключает цветную обводку и тень у плеера.",
                     "type": "button",
-                    "value": true,
-                    "defaultValue": true
+                    "bool": true,
+                    "defaultParameter": true
                 },
                 {
                     "id": "toggleVariableNextLogoColor",
                     "name": "Акцентный цвет логотипа",
                     "description": "Делай цвет лого под цвет акцента трека.",
                     "type": "button",
-                    "value": true,
-                    "defaultValue": true
+                    "bool": true,
+                    "defaultParameter": true
                 },
                 {
                     "id": "toggleMainBorders",
                     "name": "Обводка основных блоков",
                     "description": "Включает или выключает цветную обводку и тень у навигации, плеера и основного контента.",
                     "type": "button",
-                    "value": true,
-                    "defaultValue": true
+                    "bool": true,
+                    "defaultParameter": true
                 }
             ]
         },
@@ -48,8 +53,8 @@
                     "min": 0,
                     "max": 100,
                     "step": 1,
-                    "value": 50,
-                    "defaultValue": 65
+                    "value": 65,
+                    "defaultParameter": 65
                 }
             ]
         },
@@ -65,7 +70,7 @@
                     "max": 500,
                     "step": 1,
                     "value": 200,
-                    "defaultValue": 200
+                    "defaultParameter": 200
                 },
                 {
                     "id": "globalBlur",
@@ -76,7 +81,7 @@
                     "max": 5,
                     "step": 0.0625,
                     "value": 0.9375,
-                    "defaultValue": 0.9375
+                    "defaultParameter": 0.9375
                 },
                 {
                     "id": "globalBrightness",
@@ -87,7 +92,7 @@
                     "max": 3,
                     "step": 0.1,
                     "value": 0.5,
-                    "defaultValue": 1
+                    "defaultParameter": 1
                 }
             ]
         },
@@ -102,8 +107,8 @@
                     "min": 0,
                     "max": 150,
                     "step": 1,
-                    "value": 10,
-                    "defaultValue": 70
+                    "value": 20,
+                    "defaultParameter": 70
                 },
                 {
                     "id": "mainElementsBrightness",
@@ -114,7 +119,7 @@
                     "max": 3,
                     "step": 0.1,
                     "value": 1.5,
-                    "defaultValue": 1.5
+                    "defaultParameter": 1.5
                 },
                 {
                     "id": "navbarBlur",
@@ -124,8 +129,8 @@
                     "min": 0,
                     "max": 150,
                     "step": 1,
-                    "value": 10,
-                    "defaultValue": 70
+                    "value": 20,
+                    "defaultParameter": 70
                 },
                 {
                     "id": "navbarBrightness",
@@ -136,7 +141,7 @@
                     "max": 3,
                     "step": 0.1,
                     "value": 1.5,
-                    "defaultValue": 1.5
+                    "defaultParameter": 1.5
                 },
                 {
                     "id": "backgroundBrightness",
@@ -147,7 +152,7 @@
                     "max": 1,
                     "step": 0.05,
                     "value": 0.5,
-                    "defaultValue": 0.5
+                    "defaultParameter": 0.5
                 }
             ]
         },
@@ -159,7 +164,7 @@
                     "name": "Источник акцентного цвета",
                     "description": "Выберите, какой тип цвета из обложки будет основным для темы. \nПожалуйста, перейдите в Wiki проекта на гитхаб, для подробных разъяснений логики работы цветов",
                     "type": "selector",
-                    "value": 0,
+                    "selected": 0,
                     "options": [
                         {
                             "name": "Vibrant (Яркий, основной)",
@@ -186,15 +191,15 @@
                             "id": "DarkMuted"
                         }
                     ],
-                    "defaultValue": "Vibrant"
+                    "defaultParameter": "Vibrant"
                 },
                 {
                     "id": "useCustomAccentColor",
                     "name": "Использовать свой акцентный цвет",
                     "description": "Отключает автоматическое определение цвета по обложке и позволяет задать свой.",
                     "type": "button",
-                    "value": false,
-                    "defaultValue": false
+                    "bool": false,
+                    "defaultParameter": false
                 },
                 {
                     "id": "customAccentColor",
@@ -202,15 +207,16 @@
                     "description": "Выберите свой цвет. Будет работать, только если включена опция выше.",
                     "type": "color",
                     "value": "#8a63b3",
-                    "defaultValue": "#8a63b3"
+                    "defaultParameter": "#8a63b3",
+                    "input": "#00ffcc"
                 },
                 {
                     "id": "togglePlayButtonAccentColor",
                     "name": "Акцентная кнопка Play",
                     "description": "Включает или выключает использование акцентного цвета для кнопки Play.",
                     "type": "button",
-                    "value": true,
-                    "defaultValue": true
+                    "bool": true,
+                    "defaultParameter": true
                 }
             ]
         },
@@ -221,16 +227,16 @@
                     "id": "hideBetaButton",
                     "name": "Скрыть версию приложения",
                     "type": "button",
-                    "value": true,
-                    "defaultValue": false
+                    "bool": true,
+                    "defaultParameter": false
                 },
                 {
                     "id": "devAutoPlayOnStart",
                     "name": "Автоплей",
                     "description": "Запускает трек сразу после запуска Яндекс Музыки и при нажатии ctrl + r.",
                     "type": "button",
-                    "value": false,
-                    "defaultValue": false
+                    "bool": false,
+                    "defaultParameter": false
                 }
             ]
         },
@@ -242,29 +248,16 @@
                     "name": "Фуллвайб",
                     "description": "Делает блок моей волны на всю страницу.",
                     "type": "button",
-                    "value": true,
-                    "defaultValue": true
+                    "bool": true,
+                    "defaultParameter": true
                 },
                 {
                     "id": "hideVibeAnimation",
                     "name": "Скрыть анимацию 'Моя волна'",
                     "description": "Прячет анимацию появления/исчезновения блока 'Моя волна'.",
                     "type": "button",
-                    "value": true,
-                    "defaultValue": true
-                }
-            ]
-        },
-        {
-            "title": "Особое",
-            "items": [
-                {
-                    "id": "setInterval_1",
-                    "name": "text",
-                    "description": "Выставляет скорость обновления настроек темы. (Задержка нажатия на кнопку в PulseSync и срабатывание в Яндекс Музыке)",
-                    "type": "text",
-                    "value": "1000",
-                    "defaultValue": "1000"
+                    "bool": true,
+                    "defaultParameter": true
                 }
             ]
         },
@@ -276,8 +269,8 @@
                     "name": "Показывать кнопку Zen Mode",
                     "description": "Добавляет кнопку для быстрого включения/отключения режима Zen Mode.",
                     "type": "button",
-                    "value": true,
-                    "defaultValue": true
+                    "defaultParameter": true,
+                    "bool": true
                 }
             ]
         }
