@@ -1,5 +1,4 @@
-let isUpdating = false
-/**
+let isUpdating = false/**
  * @file ChromaSync Theme Script
  * @description Этот скрипт управляет всей динамической функциональностью темы ChromaSync:
  *              - Извлекает цвета из обложек треков.
@@ -292,7 +291,7 @@ function createZenModeButton() {
     zenButton.style.zIndex = '999999999';
     zenButton.style.width = '20px';
     zenButton.style.height = '20px';
-    
+
     anchorContainer.appendChild(zenButton);
 }
 
@@ -367,7 +366,7 @@ function createOurCustomButton() {
     customButton.style.width = '28px';
     customButton.style.height = '28px';
     customButton.style.fontSize = '16px';
-    
+
     wrapper.appendChild(customButton);
 }
 
@@ -403,7 +402,7 @@ function initUltimateModal() {
 
     // Закрытие по клику на кнопку
     panel.querySelector('.ultimate-modal-close-btn').addEventListener('click', hideUltimateModal);
-    
+
     // Закрытие по клику вне окна (на оверлей)
     panel.addEventListener('click', (e) => {
         if (e.target === panel) {
@@ -768,100 +767,73 @@ const updateStyleOnSettingChange = (settingKeys, styleId, cssGenerator) => {
     }
 }
 
-let lastFetchPromise = null
-let lastFetchTime = 0
-const fetchDedupWindowMs = 300
+let SETTINGS_API = null;
+let _setSettingsQueuePromise = Promise.resolve();
 
-/**
- * Загружает настройки из локального сервера PulseSync.
- * @param {string} [name='ChromaSync Lite'] - Имя темы (для URL).
- * @returns {object|null} Объект с настройками или null в случае ошибки.
- */
-async function getSettings(name = 'ChromaSync Lite') {
-    // Если недавно уже выполняется похожий запрос — возвращаем тот же промис.
-    const now = Date.now()
-    if (lastFetchPromise && now - lastFetchTime < fetchDedupWindowMs) {
-        return lastFetchPromise
-    }
+const SELECTOR_MAPPINGS = {
+    "accentColorSource": [
+        "Vibrant",
+        "LightVibrant",
+        "DarkVibrant",
+        "Muted",
+        "LightMuted",
+        "DarkMuted"
+    ]
+};
 
-    lastFetchTime = now
-    lastFetchPromise = (async () => {
-        try {
-            const safeName = encodeURIComponent(name)
-            const response = await fetch(`http://localhost:2007/get_handle?name=${safeName}`)
-            if (!response.ok) throw new Error(`Ошибка сети: ${response.status}`)
-            const { data } = await response.json()
-            if (!data?.sections) {
-                console.warn('Структура данных настроек не соответствует ожидаемой.')
-                return null
-            }
-            return transformJSON(data)
-        } catch (error) {
-            console.error(error)
-            return null
-        } finally {
-            setTimeout(() => {
-                if (lastFetchPromise) lastFetchPromise = null
-            }, fetchDedupWindowMs)
+function resolveSelectorValues(s) {
+    if (!s) return s;
+    const mapped = {};
+    for (const key in s) {
+        const cleanKey = key.replace(/_\d+$/, '');
+
+        if (mapped[cleanKey] && key !== cleanKey) {
+            mapped[cleanKey] = { ...s[key] };
+        } else {
+            mapped[cleanKey] = { ...s[key] };
         }
-    })()
 
-    return lastFetchPromise
-}
+        mapped[key] = { ...s[key] };
 
-/**
- * Преобразует JSON-структуру от PulseSync в более удобный плоский объект.
- * @param {object} data - Исходный JSON от PulseSync.
- * @returns {object} Трансформированный объект настроек.
- */
-function transformJSON(data) {
-    const result = {}
-    try {
-        data.sections.forEach(section => {
-            section.items.forEach(item => {
-                if (item.type === 'text' && item.buttons) {
-                    result[item.id] = {}
-                    item.buttons.forEach(button => {
-                        result[item.id][button.name] = {
-                            value: button.text,
-                            default: button.defaultParameter,
-                        }
-                    })
-                } else if (item.type === 'selector') {
-                    const selectedIndex = item.selected ?? 0
-                    const selectedValue = item.options[selectedIndex]?.id
-                    result[item.id] = {
-                        value: selectedValue,
-                        default: item.defaultParameter,
-                    }
-                } else {
-                    result[item.id] = {
-                        value: item.bool ?? item.input ?? item.value ?? item.filePath,
-                        default: item.defaultParameter,
-                    }
+        if (SELECTOR_MAPPINGS[cleanKey] && mapped[cleanKey].value !== undefined && mapped[cleanKey].value !== null) {
+            const val = mapped[cleanKey].value.toString();
+            if (/^\d+$/.test(val)) {
+                const index = parseInt(val, 10);
+                if (SELECTOR_MAPPINGS[cleanKey][index] !== undefined) {
+                    mapped[cleanKey].value = SELECTOR_MAPPINGS[cleanKey][index];
+                    mapped[key].value = mapped[cleanKey].value;
                 }
-            })
-        })
-    } finally {
-        return result
+            }
+        }
     }
+    return mapped;
 }
 
-let settingsDelay = 1000
-let updateInterval
+function setSettings(newSettings) {
+    _setSettingsQueuePromise = _setSettingsQueuePromise
+        .then(() => _setSettingsCore(newSettings))
+        .catch(e => console.error('[ChromaSync] Error in settings queue:', e));
+    return _setSettingsQueuePromise;
+}
 
 /**
  * Главная функция, которая применяет все настройки к элементам страницы.
  * @param {object} newSettings - Объект с новыми настройками.
  */
-async function setSettings(newSettings) {
+async function _setSettingsCore(newSettings) {
     if (!newSettings) {
         console.warn('[ChromaSync] Попытка применить пустые настройки. Операция отменена.')
         return
     }
+    
+    // Синхронизируем глобальное состояние прямо перед выполнением кадра из очереди,
+    // чтобы функции вроде updateStyleOnSettingChange видели правильный стейт, исключая гонку.
+    settings = newSettings;
     // Обновление заголовка темы
-    const titleGroup = newSettings.themeTitleText || newSettings.themeTitle
-    const titleValue = (titleGroup && (titleGroup.text?.value ?? titleGroup.text ?? titleGroup.value)) || 'ChromaSync'
+    const titleGroup = newSettings.themeTitleText || newSettings.themeTitle || newSettings.themeTitleText_1
+    const titleValue = newSettings.themeTitleText_1?.value ||
+        (titleGroup && (titleGroup.text?.value ?? titleGroup.text ?? titleGroup.value)) ||
+        'ChromaSync Lite'
 
     syncHeaderOverlayText(titleValue)
 
@@ -943,12 +915,13 @@ async function setSettings(newSettings) {
         const saturate = s.globalSaturate?.value ?? 200
         const blur = s.globalBlur?.value ?? 0.9375
         const brightness = s.globalBrightness?.value ?? 1
+        const fullFilter = `saturate(${saturate}%) blur(${blur}rem) brightness(${brightness})`.trim()
         return `
                 .TrackModal_root__QrFg6.ifxS_8bgSnwBoCsyow0E::before {
                     background-color: rgba(25, 25, 25, ${opacity}) !important;
                 }
                 .ifxS_8bgSnwBoCsyow0E {
-                    backdrop-filter: saturate(${saturate}%) blur(${blur}rem) brightness(${brightness}) !important;
+                    backdrop-filter: ${fullFilter} !important;
                 }
             `
     })
@@ -1062,22 +1035,6 @@ async function setSettings(newSettings) {
         window.hasRun = true
     }
 
-    // Обновление интервала опроса настроек.
-    // Сравниваем с предыдущими настройками (переменная settings содержит старое состояние,
-    // т.к. update() теперь вызывает setSettings перед присвоением newSettings).
-    const prevHasNoSettings = !settings || Object.keys(settings).length === 0
-    const prevInterval = settings?.setInterval?.text?.value
-    const newInterval = newSettings?.setInterval?.text?.value
-    if (prevHasNoSettings || prevInterval !== newInterval) {
-        const newDelay = parseInt(newInterval, 10) || 1000
-        if (settingsDelay !== newDelay) {
-            settingsDelay = newDelay
-            clearInterval(updateInterval)
-            updateInterval = setInterval(update, settingsDelay)
-            console.log(`[ChromaSync] Интервал опроса настроек изменён: ${settingsDelay}ms`)
-        }
-    }
-
     // Lite: настройки BeatPulse отсутствуют
 
     // Hide Beta button
@@ -1097,37 +1054,67 @@ async function setSettings(newSettings) {
     }
 }
 
-/**
- * Циклическая функция, которая опрашивает настройки и применяет их.
- */
-async function update() {
-    if (isUpdating) {
-        console.log('[ChromaSync] Пропускаю update — предыдущий вызов ещё выполняется.')
-        return
+function initSettings() {
+    if (SETTINGS_API || !window.pulsesyncApi) return;
+
+    const base = String(window.__chromasyncMetaName || 'ChromaSync').trim();
+    const candidateNames = [];
+    const lower = base.toLowerCase();
+    if (/ultimate|lite/.test(lower)) {
+        candidateNames.push(base);
+    } else {
+        candidateNames.push(base + ' Lite', base, base + ' Ultimate');
     }
-    isUpdating = true
-    try {
-        const newSettings = await getSettings('ChromaSync Lite')
-        if (newSettings && Object.keys(newSettings).length > 0) {
-            await setSettings(newSettings)
-            settings = newSettings
-        }
-    } catch (e) {
-        console.error('[ChromaSync] Ошибка в update():', e)
-    } finally {
-        isUpdating = false
+
+    for (const name of candidateNames) {
+        try {
+            const api = window.pulsesyncApi?.getSettings?.(name);
+            if (api && api.onChange) {
+                SETTINGS_API = api;
+                window.__chromasyncMetaNameFound = name;
+                console.debug(`[ChromaSync] WebSocket API успешно подключен к '${name}'`);
+                break;
+            }
+        } catch (e) { }
+    }
+
+    if (SETTINGS_API) {
+        const attemptHydration = () => {
+            const s = SETTINGS_API.getCurrent() || {};
+            if (Object.keys(s).length === 0) {
+                setTimeout(attemptHydration, 200);
+                return;
+            }
+            const remapped = resolveSelectorValues(s);
+            setSettings(remapped).catch(e => console.error(e));
+            console.debug('[ChromaSync] Начальные настройки успешно гидратированы.');
+        };
+        attemptHydration();
+
+        SETTINGS_API.onChange(s => {
+            const remapped = resolveSelectorValues(s || {});
+            setSettings(remapped);
+            console.debug('[ChromaSync] Применены обновленные настройки (WebSocket).');
+        });
+    } else {
+        console.warn('[ChromaSync] API не найдено. Ожидание генерации...');
+        setTimeout(initSettings, 500);
     }
 }
 
-/**
- * Инициализирует скрипт: запускает первый опрос и устанавливает интервал.
- */
-async function init() {
-    try {
-        await update()
-    } finally {
-        updateInterval = setInterval(update, settingsDelay)
+function update() {
+    if (document.hidden || window.__csSettingsPollingPaused === true) return;
+    if (SETTINGS_API) {
+        const s = SETTINGS_API.getCurrent() || {};
+        if (Object.keys(s).length > 0) {
+            const remapped = resolveSelectorValues(s);
+            setSettings(remapped);
+        }
     }
+}
+
+function init() {
+    initSettings()
 }
 
 /**
@@ -1162,7 +1149,7 @@ document.addEventListener('visibilitychange', () => {
     }
 })
 
-window.addEventListener('focus', () => {})
+window.addEventListener('focus', () => { })
 
 // Lite version: no PRO bundle loader
 function loadBeatPulseIfNeeded() {
@@ -1180,37 +1167,37 @@ window.addEventListener('focus', () => {
 setTimeout(() => {
     try {
         cleanupUnauthorizedPro()
-    } catch {}
+    } catch { }
 }, 0)
 
 // Запускаем всю логику.
 init()
 
-// Disable Yandex.Metrika script and guard against re-adding
+    // Disable Yandex.Metrika script and guard against re-adding
 
-// Close SOUND_QUALITY menu on second click (toggle behavior)
-;(function fixSoundQualityToggle() {
-    const isMenuOpen = () => !!document.querySelector('[data-test-id="QUALITY_SETTINGS_CONTEXT_MENU"]')
-    document.addEventListener(
-        'click',
-        ev => {
-            const btn = ev.target && ev.target.closest('button[data-test-id="SOUND_QUALITY_BUTTON"]')
-            if (!btn) return
-            if (isMenuOpen()) {
-                // Already open: intercept and close via Escape
-                ev.preventDefault()
-                ev.stopImmediatePropagation()
-                const esc = new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, which: 27, bubbles: true })
-                document.dispatchEvent(esc)
-                setTimeout(() => {
-                    const menu = document.querySelector('[data-test-id="QUALITY_SETTINGS_CONTEXT_MENU"]')
-                    if (menu) menu.remove()
-                }, 50)
-            }
-        },
-        true,
-    )
-})()
+    // Close SOUND_QUALITY menu on second click (toggle behavior)
+    ; (function fixSoundQualityToggle() {
+        const isMenuOpen = () => !!document.querySelector('[data-test-id="QUALITY_SETTINGS_CONTEXT_MENU"]')
+        document.addEventListener(
+            'click',
+            ev => {
+                const btn = ev.target && ev.target.closest('button[data-test-id="SOUND_QUALITY_BUTTON"]')
+                if (!btn) return
+                if (isMenuOpen()) {
+                    // Already open: intercept and close via Escape
+                    ev.preventDefault()
+                    ev.stopImmediatePropagation()
+                    const esc = new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, which: 27, bubbles: true })
+                    document.dispatchEvent(esc)
+                    setTimeout(() => {
+                        const menu = document.querySelector('[data-test-id="QUALITY_SETTINGS_CONTEXT_MENU"]')
+                        if (menu) menu.remove()
+                    }, 50)
+                }
+            },
+            true,
+        )
+    })()
 
 // Lite version: no BeatPulse startup hooks
 
@@ -1240,7 +1227,7 @@ function getTitlebarSelector() {
     try {
         const arr = typeof window.findCssRuleByPartialName === 'function' ? window.findCssRuleByPartialName('TitleBar_pulseText') : null
         if (Array.isArray(arr) && arr.length && typeof arr[0] === 'string') return arr[0]
-    } catch {}
+    } catch { }
     return null
 }
 
@@ -1260,12 +1247,12 @@ function syncHeaderOverlayText(text) {
     let panel = document.querySelector('div.PSBpanel')
 
     // если есть нативный PulseSync title, отключаем кастомизацию надписи
-    if (document.querySelector('span[class*="TitleBar_pulseText"]')) {
-        if (panel) panel.style.display = 'none'
-        const hideStyle = document.getElementById('psb-hide-origin')
-        if (hideStyle) hideStyle.remove()
-        return
-    }
+    // if (document.querySelector('span[class*="TitleBar_pulseText"]')) {
+    //     if (panel) panel.style.display = 'none'
+    //     const hideStyle = document.getElementById('psb-hide-origin')
+    //     if (hideStyle) hideStyle.remove()
+    //     return
+    // }
 
     panel = panel || ensurePSBPanel()
     if (!panel) return
@@ -1286,12 +1273,12 @@ function syncHeaderOverlayText(text) {
 
     const selector = getTitlebarSelector()
     let hideStyle = document.getElementById('psb-hide-origin')
-    
+
     if (!selector) {
         if (hideStyle) hideStyle.remove()
         return
     }
-    
+
     if (!hideStyle) {
         hideStyle = document.createElement('style')
         hideStyle.id = 'psb-hide-origin'
@@ -1300,75 +1287,5 @@ function syncHeaderOverlayText(text) {
     hideStyle.textContent = `${selector} { visibility: hidden !important; }`
 }
 
-// function updatePSBTitleText(text) {
-//     const desired = String(text ?? '')
-//     const hide = document.getElementById('psb-hide-origin')
-//     if (hide) hide.remove()
-
-//     const selector = getTitlebarSelector()
-//     if (!selector) return
-
-//     applyTitlebarCss(selector)
-
-//     const className = selector.startsWith('.') ? selector.slice(1) : selector
-//     const nodes = Array.from(document.getElementsByClassName(className))
-//     nodes.forEach(el => {
-//         el.textContent = desired
-//         el._psbDesired = desired
-//         if (!el._psbObserver) {
-//             const mo = new MutationObserver(() => {
-//                 if (el.textContent !== el._psbDesired) el.textContent = el._psbDesired
-//             })
-//             mo.observe(el, { characterData: true, childList: true, subtree: true })
-//             el._psbObserver = mo
-//         }
-//     })
-
-//     if (document._psbGlobalObserver && typeof document._psbGlobalObserver.disconnect === 'function') {
-//         try {
-//             document._psbGlobalObserver.disconnect()
-//         } catch {}
-//     }
-
-//     document._psbGlobalObserver = new MutationObserver(mutations => {
-//         for (const m of mutations) {
-//             if (m.addedNodes) {
-//                 m.addedNodes.forEach(node => {
-//                     if (!node || node.nodeType !== 1) return
-
-//                     if (node.matches && node.matches(selector)) {
-//                         node.textContent = desired
-//                         node._psbDesired = desired
-//                         if (!node._psbObserver) {
-//                             const mo = new MutationObserver(() => {
-//                                 if (node.textContent !== node._psbDesired) node.textContent = node._psbDesired
-//                             })
-//                             mo.observe(node, { characterData: true, childList: true, subtree: true })
-//                             node._psbObserver = mo
-//                         }
-//                     }
-
-//                     if (node.querySelectorAll) {
-//                         node.querySelectorAll(selector).forEach(sub => {
-//                             sub.textContent = desired
-//                             sub._psbDesired = desired
-//                             if (!sub._psbObserver) {
-//                                 const mo = new MutationObserver(() => {
-//                                     if (sub.textContent !== sub._psbDesired) sub.textContent = sub._psbDesired
-//                                 })
-//                                 mo.observe(sub, { characterData: true, childList: true, subtree: true })
-//                                 sub._psbObserver = mo
-//                             }
-//                         })
-//                     }
-//                 })
-//             }
-//         }
-//     })
-//     document._psbGlobalObserver.observe(document.body, { childList: true, subtree: true })
-// }
-
 // Prewarm Vibrant as early as possible
-loadVibrantScript().catch(() => {})
-
-/* lite: no licensing */
+loadVibrantScript().catch(() => { })

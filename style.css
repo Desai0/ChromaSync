@@ -791,3 +791,7 @@ body.zen-mode-active [data-test-id="FULLSCREEN_PLAYER_BUTTON"] {
 .By12CU9obvaH0jYtauNw {
     scrollbar-width: none
 }
+
+.ps-lyrics-tr {
+    border: none !important;
+}

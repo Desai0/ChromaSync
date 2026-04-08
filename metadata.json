@@ -10,7 +10,7 @@
     ],
     "type": "theme",
     "description": "Адаптивная тема оживляющая интерфейс прозрачностью и цветами обложки каждого трека",
-    "version": "2.5.2",
+    "version": "2.6",
     "css": "style.css",
     "script": "script.js",
     "tags": [
@@ -21,5 +21,8 @@
     "fromPext": true,
     "allowedUrls": [
         "https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"
-    ]
+    ],
+    "installSource": "local",
+    "id": "f2049d62683311d08aa572b0",
+    "storeAddonId": "d6ff5bd1-e0b3-4f88-b7c3-5e1fc2067a23"
 }
