@@ -3,7 +3,7 @@
 # **ChromaSync Ecosystem**
 
 ### Кроссплатформенный плагин для визуальной кастомизации и расширения возможностей десктопных и мобильных стриминговых плееров.
-<img width="1917" height="797" alt="Снимок экрана 2025-07-14 230322" src="https://github.com/user-attachments/assets/50c29c55-2cca-49fa-9229-4d50add96efd" /> <br>
+<img width="1910" height="800" alt="Screenshot 2026-05-08 231308" src="https://github.com/user-attachments/assets/c1dcf9d4-ad29-4268-9bbb-d37e3481810e" />
 <details>
   <summary>📷 Показать еще скриншоты</summary>
 
