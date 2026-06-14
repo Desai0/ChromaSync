@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="1254" height="627" alt="Image17_22_24" src="https://github.com/user-attachments/assets/0936c28a-26e7-4e43-8058-16872734cb76" />
+<img width="1254" height="627" alt="Image17_22_24" src="https://github.com/user-attachments/assets/570c057b-009a-488f-b324-388493192344" />
 
 # ChromaSync
 
@@ -32,9 +32,9 @@
 
 |                         До                         |                       **После (Лишь один из вариантов настройки)**                         |
 |:-----------------------------------------------------------:|:-----------------------------------------------------------------:|
-| <img width="1916" height="802" alt="Screenshot 2026-06-13 105739" src="https://github.com/user-attachments/assets/5d768f7c-5541-4a8f-bfb6-c438186beb2b" /> | <img width="1916" height="802" alt="Screenshot 2026-06-13 105817" src="https://github.com/user-attachments/assets/d455b81f-54e0-481b-85a1-c7227b325386" /> |
-| <img width="1916" height="802" alt="Screenshot 2026-06-13 110120" src="https://github.com/user-attachments/assets/b50a0698-6d0a-46c6-b9c6-d12bf282e472" /> | <img width="1916" height="802" alt="Screenshot 2026-06-13 110059" src="https://github.com/user-attachments/assets/4cf21226-81ad-4205-a293-46c99dc1fca8" /> |
-| <img width="1916" height="802" alt="Screenshot 2026-06-13 101945" src="https://github.com/user-attachments/assets/6446cba1-71f3-46f3-8aa1-d2f75ab8e658" /> | <img width="1916" height="802" alt="Screenshot 2026-06-13 101859" src="https://github.com/user-attachments/assets/5f41ea26-b8b5-4758-8a22-13aaa55b16d2" /> |
+| <img width="1916" height="802" alt="Screenshot 2026-06-13 105739" src="https://github.com/user-attachments/assets/91b659cb-8319-4bf2-b998-ea9f2bdd6376" /> | <img width="1916" height="802" alt="Screenshot 2026-06-13 105817" src="https://github.com/user-attachments/assets/e14246d3-d6f5-4d3f-bd20-39566a1e0442" /> |
+| <img width="1916" height="802" alt="Screenshot 2026-06-13 110120" src="https://github.com/user-attachments/assets/4fd29efa-627d-4a9f-a5a2-65cec426c2a5" /> | <img width="1916" height="802" alt="Screenshot 2026-06-13 110059" src="https://github.com/user-attachments/assets/267950cb-832e-44e3-a4df-287d3cca8282" /> |
+| <img width="1916" height="802" alt="Screenshot 2026-06-13 101945" src="https://github.com/user-attachments/assets/8f681768-f305-4237-989a-1a9ef9ab9d20" /> | <img width="1916" height="802" alt="Screenshot 2026-06-13 101859" src="https://github.com/user-attachments/assets/03a035e6-4e88-42d5-8ea2-f9c4a3cac6ec" /> |
 
 ## Главное
 **Каждая функция настраиваема, вплоть до пикселя!**
@@ -62,7 +62,7 @@
 Пульсация **управляет масштабом** нескольких элементов, в том числе фоновой обложкой. Для разных жанров и предпочтений доступны **четыре независимых, настраиваемых** алгоритма.
 
 <p align="center">
-  <img width="780" height="326" alt="2026-06-12 15-08-26" src="https://github.com/user-attachments/assets/922bb73d-0b8e-4536-85ab-7df0c705787e" />
+  <img width="860" alt="2026-06-12 15-08-26" src="https://github.com/user-attachments/assets/58b5564b-717f-41f0-8e28-245019c7cfb4" />
 </p>
 
 ### Пульсация лирики и обложки
@@ -70,7 +70,7 @@
 **Активная строка синхронной лирики и Обложка** пульсируют и получают плавное свечение в такт музыке реагируя на энергию трека
 
 <p align="center">
-  <img width="760" height="318" alt="2026-06-12 14-27-15" src="https://github.com/user-attachments/assets/8c4452b0-1de1-49ed-a0c7-fc29f66ac5e5" />
+  <img width="860" alt="2026-06-12 14-27-15" src="https://github.com/user-attachments/assets/0070c9c8-4228-4f9c-a3af-932cc78ad358" />
 </p>
 
 ## 🔞 Локальные треки в Потоке + Android🔞
@@ -85,8 +85,8 @@
 1) Загружаете отсутствующий на площадке трек для последующей вставки;
 2) Раз в заданный период вставляется ваш загруженный трек;
 <p align="left">
-      <img src="https://github.com/user-attachments/assets/d330d7e0-67e8-4c94-b450-f678a1966bcf" height="280" alt="Локальные треки на ПК"/>
-      <img src="https://github.com/user-attachments/assets/b2460d39-1796-4b38-837a-b71354655dae" height="280" alt="Локальные треки на Android"/>
+      <img height="280" alt="Локальные треки на ПК" src="https://github.com/user-attachments/assets/c1e8fcc4-da82-42b9-a0a9-f93c134e88f0" />
+      <img height="280" alt="Локальные треки на Android" src="https://github.com/user-attachments/assets/83fc786a-6c8d-429a-a38a-4d5daf793685" />
 </p>
 <p align="center">
   <sub>Desktop · Android</sub>
@@ -102,7 +102,7 @@
 - В панели отображаются обложка, название и исполнители.
 
 <p align="center">
-  <img width="1916" height="802" alt="Screenshot 2026-06-12 151903" src="https://github.com/user-attachments/assets/e3d328cf-6971-42f3-a6e8-8facd44ed9ec" />
+  <img width="1916" height="802" alt="Screenshot 2026-06-12 151903" src="https://github.com/user-attachments/assets/9c0fedd0-e203-4378-8d73-4e5983823cc8" />
 </p>
 
 В дальнейшем этот функционал будет развиваться и произойдет **много крутых изменений**!
@@ -118,7 +118,7 @@
 
 
 <p align="center">
-  <img width="700" height="293" alt="2026-06-12 14-43-38(1)" src="https://github.com/user-attachments/assets/ccebc076-d692-4fcc-913e-b5490ce11384" />
+  <img width="700" height="293" alt="2026-06-12 14-43-38(1)" src="https://github.com/user-attachments/assets/f59a8e39-5a7d-4d08-a945-e1cbaab6d864" />
 </p>
 
 <br>
@@ -132,7 +132,7 @@
 
 **Canvas-слой с тремя стилями:** <ins>Снег</ins>, <ins>Лепестки</ins> и <ins>Искры</ins>
 <p align="center">
-  <img width="720" height="301" alt="2026-06-12 14-35-17" src="https://github.com/user-attachments/assets/20b7ef9f-5f1a-4ebb-a861-24d14fab5c8a" />
+  <img width="720" height="301" alt="2026-06-12 14-35-17" src="https://github.com/user-attachments/assets/57e39d94-d22e-4adc-9f47-9d4ed6804a44" />
 </p>
 
 Настраиваются **плотность** и **FPS.** Частицы могут **реагировать** на сильные удары разлётом от центра или краткой антигравитацией с последующим падением.
@@ -152,7 +152,7 @@
 3) эффект `The Wired` с разрывами, RGB-сдвигом и цифровыми помехами.
 
 <p align="center">
-<img width="1280" height="533" alt="image" src="https://github.com/user-attachments/assets/d55a1274-c033-4fe2-8929-94275f3f435f" />
+  <img width="1280" height="533" alt="image" src="https://github.com/user-attachments/assets/79d0d651-601b-4ee0-815e-3f0f114e1022" />
 </p>
 
 <br>
@@ -183,7 +183,7 @@
 
 |                         Базовый                         |                       Альтернативный                         |                       Минималистичный                         |                        Старый                          |
 |:-----------------------------------------------------------:|:-----------------------------------------------------------------:|:-----------------------------------------------------------------:|:-----------------------------------------------------------------:|
-| <img width="1916" height="802" alt="Screenshot 2026-06-14 043758" src="https://github.com/user-attachments/assets/b48246a7-7f2f-4709-b561-0ef3db9359d9" /> | <img width="1916" height="802" alt="Screenshot 2026-06-14 043805" src="https://github.com/user-attachments/assets/0ff4a309-04f7-4ee7-a5c3-ac80760aa185" /> | <img width="1916" height="802" alt="Screenshot 2026-06-14 043818" src="https://github.com/user-attachments/assets/828e13f6-b750-4e55-b0f3-a50e29829fa9" /> | <img width="1916" height="802" alt="Screenshot 2026-06-14 043855" src="https://github.com/user-attachments/assets/5f43aef1-3641-41e1-858a-01d96b45f541" /> |
+| <img width="1916" height="802" alt="Screenshot 2026-06-14 043758" src="https://github.com/user-attachments/assets/806d47ee-42c9-40d8-931e-351838b1bd94" /> | <img width="1916" height="802" alt="Screenshot 2026-06-14 043805" src="https://github.com/user-attachments/assets/01d7db85-2126-47eb-a22b-b0205c90b224" /> | <img width="1916" height="802" alt="Screenshot 2026-06-14 043818" src="https://github.com/user-attachments/assets/9f116238-15d4-4a26-b1bd-80d825a45412" /> | <img width="1916" height="802" alt="Screenshot 2026-06-14 043855" src="https://github.com/user-attachments/assets/143f136d-8f71-4931-ab05-ee0e9ed72da6" /> |
 
 ***ChromaSync*** определяет несовместимое сочетание старого плеера и выбранного пресета и **показывает подсказку**, если требуется сменить пресет настроек. Так же есть возможность дополнительно включить вид еще более похожий на **старый интерфейс** с помощью аддона: [Music Old Home UI](https://github.com/Desai0/MainPage-GreatAgain)
 
@@ -203,7 +203,7 @@
 - Элементы управления остаются доступными для выхода из **Zen Mode**.
 
 <p align="center">
-  <img width="1280" height="532" alt="image" src="https://github.com/user-attachments/assets/4c7e35f5-65ed-4771-9bbf-e41e44850c21" />
+  <img width="1912" height="796" alt="Screenshot 2026-06-12 053229" src="https://github.com/user-attachments/assets/e7f68502-c1c9-4232-a49a-83f4a4ffc41c" />
 </p>
 
 <br>
@@ -216,7 +216,7 @@
 <br>
 
 <p align="center">
-  <img width="720" height="301" alt="2026-06-13 05-19-23" src="https://github.com/user-attachments/assets/e6896d3c-4157-4b74-afea-89179fd4a82d" />
+  <img width="720" height="301" alt="2026-06-13 05-19-23" src="https://github.com/user-attachments/assets/d7bd2c3b-22ef-4ec2-9b37-dc7841250bbf" />
 </p>
 
 **Помимо всего перечисленного выше:**
@@ -298,7 +298,7 @@
 
 **50+ параметров!** Все доступны в настройках аддона ***PulseSync*** и применяются в реальном времени, кроме пунктов с отметкой `↻`.
 
-<img width="1309" height="697" alt="image" src="https://github.com/user-attachments/assets/6a448797-e212-42e5-8976-55f58ee47f1a" />
+<img width="1309" height="697" alt="Screenshot 2026-06-14 071157" src="https://github.com/user-attachments/assets/99524a5a-05bd-42da-bd91-80c4d5150f5b" />
 
 Если система **слабая**, сначала переключите оптимизацию на `Aggressive`, снизьте FPS и плотность частиц, затем отключите параллакс, шум, пикселизацию и Glitch.
 
@@ -341,8 +341,7 @@
 
 Перейдите в [бот](https://t.me/ChromaSyncBOT), выберите *"Получить Ultimate"*, у ***Tribute*** есть **бесплатный 7-дневный период**, так же есть пользовательская **реферальная система**, если вы пригласите друга, то получите доступ к **Ultimate**.
 
-Как только у вас появляется доступ, бот начнет выдавать API-ключи, скопировали и привели настройки в ***PulseSync*** к такому виду:<img width="363" height="334" alt="image" src="https://github.com/user-attachments/assets/11be87e2-998e-4fe9-b201-b965ef53e079" />
-
+Как только у вас появляется доступ, бот начнет выдавать API-ключи, скопировали и привели настройки в ***PulseSync*** к такому виду: <img width="363" height="334" alt="Screenshot 2026-06-14 073824" src="https://github.com/user-attachments/assets/6cbe6743-baf4-4d43-979d-9785fff80d44" />
 
 </details>
 
