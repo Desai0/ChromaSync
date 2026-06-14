@@ -85,7 +85,7 @@
 1) Загружаете отсутствующий на площадке трек для последующей вставки;
 2) Раз в заданный период вставляется ваш загруженный трек;
 <p align="left">
-      <img src="https://github.com/user-attachments/assets/d330d7e0-67e8-4c94-b450-f678a1966bcf" height="340" alt="Локальные треки на ПК"/>
+      <img src="https://github.com/user-attachments/assets/d330d7e0-67e8-4c94-b450-f678a1966bcf" height="300" alt="Локальные треки на ПК"/>
       <img src="https://github.com/user-attachments/assets/b2460d39-1796-4b38-837a-b71354655dae" height="300" alt="Локальные треки на Android"/>
 </p>
 <p align="center">
