@@ -11,7 +11,7 @@
 [![PulseSync](https://img.shields.io/badge/Powered_by-PulseSync-001014?style=for-the-badge&labelColor=1f9d74)](https://pulsesync.dev/)
 [![Telegram](https://img.shields.io/badge/Telegram-ChromaSync-051611?style=for-the-badge&logo=telegram&labelColor=005ed9)](https://t.me/ChromaSync)
 
-[Установить](#установка) · [Возможности](#главное) · [Ultimate](#chromasync-ultimate) · [Настройка](#настройка) · [Поддержка](#ссылки)
+[Установить](#installation) · [Возможности](#baza) · [Ultimate](#chromasync-ultimate) · [Настройка](#setting) · [Поддержка](#links)
 
 </div>
 
@@ -37,6 +37,7 @@
 | <img width="1916" height="802" alt="Screenshot 2026-06-13 101945" src="https://github.com/user-attachments/assets/8f681768-f305-4237-989a-1a9ef9ab9d20" /> | <img width="1916" height="802" alt="Screenshot 2026-06-13 101859" src="https://github.com/user-attachments/assets/03a035e6-4e88-42d5-8ea2-f9c4a3cac6ec" /> |
 
 ## Главное
+<a id="baza"></a>
 **Каждая функция настраиваема, вплоть до пикселя!**
 
 | | Возможность | Что меняется |
@@ -84,9 +85,8 @@
 **Вставка:**
 1) Загружаете отсутствующий на площадке трек для последующей вставки;
 2) Раз в заданный период вставляется ваш загруженный трек;
-<p align="left">
-      <img height="280" alt="Локальные треки на ПК" src="https://github.com/user-attachments/assets/c1e8fcc4-da82-42b9-a0a9-f93c134e88f0" />
-      <img height="280" alt="Локальные треки на Android" src="https://github.com/user-attachments/assets/83fc786a-6c8d-429a-a38a-4d5daf793685" />
+<p align="center">
+      <img width="1043" height="360" alt="desktop_android_demo_small" src="https://github.com/user-attachments/assets/e92689f6-5c80-4a9d-baa0-012076310611" />
 </p>
 <p align="center">
   <sub>Desktop · Android</sub>
@@ -300,7 +300,7 @@
 > После получения `API-Token` откройте настройки ***ChromaSync***, вставьте его в раздел **ChromaSync Ultimate** и включите **Активировать Ultimate**.
 
 ## Настройка
-
+<a id="setting"></a>
 **50+ параметров!** Все доступны в настройках аддона ***PulseSync*** и применяются в реальном времени, кроме пунктов с отметкой `↻`.
 
 <img width="1309" height="697" alt="Screenshot 2026-06-14 071157" src="https://github.com/user-attachments/assets/99524a5a-05bd-42da-bd91-80c4d5150f5b" />
@@ -309,7 +309,7 @@
 
 # Установка 📦
 
-<a id="установка"></a>
+<a id="installation"></a>
 
 ### 🖥 Для Desktop (Windows/macOS/Linux)
 1.  Скачайте и установите инжектор [***PulseSync***](https://pulsesync.dev/).
@@ -421,7 +421,7 @@ Vibe использует нативный контроллер энергии, 
 </details>
 
 ## Ссылки
-
+<a id="links"></a>
 - [Релизы ChromaSync](https://github.com/Desai0/ChromaSync/releases)
 - [Telegram-канал](https://t.me/ChromaSync)
 - [Ultimate 💎](https://t.me/ChromaSyncBOT?start=github)
