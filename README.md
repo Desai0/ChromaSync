@@ -36,6 +36,8 @@
 | <img width="1916" height="802" alt="Screenshot 2026-06-13 110120" src="https://github.com/user-attachments/assets/4fd29efa-627d-4a9f-a5a2-65cec426c2a5" /> | <img width="1916" height="802" alt="Screenshot 2026-06-13 110059" src="https://github.com/user-attachments/assets/267950cb-832e-44e3-a4df-287d3cca8282" /> |
 | <img width="1916" height="802" alt="Screenshot 2026-06-13 101945" src="https://github.com/user-attachments/assets/8f681768-f305-4237-989a-1a9ef9ab9d20" /> | <img width="1916" height="802" alt="Screenshot 2026-06-13 101859" src="https://github.com/user-attachments/assets/03a035e6-4e88-42d5-8ea2-f9c4a3cac6ec" /> |
 
+> ***ChromaSync*** — независимый сторонний проект для пользовательской кастомизации интерфейса. Проект не связан с *Яндексом, Яндекс Музыкой, Spotify* или иными правообладателями. Все названия, товарные знаки, интерфейсы и контент **принадлежат их владельцам.**
+
 ## Главное
 <a id="baza"></a>
 **Каждая функция настраиваема, вплоть до пикселя!**
@@ -435,7 +437,6 @@ Vibe использует нативный контроллер энергии, 
 
 Проект вдохновлён темой [Blurity](https://github.com/Diramix/blurity) от diram1x.
 
-> ***ChromaSync*** является независимым сторонним проектом и не связан с Spotify, Яндексом или иными компаниями.
 ---
 
 <div align="center">
